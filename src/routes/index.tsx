@@ -377,7 +377,7 @@ function HeroCarousel() {
 
 /* ---------------- Hero ---------------- */
 function Hero() {
-  const lines = ["Tu marca en redes,", "con estrategia", "real."];
+  const lines = ["Tu marca tiene algo que decir.", "Yo te ayudo", "a contarlo."];
   return (
     <>
       <section id="home" className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden pt-20 pb-8 md:pt-24 md:pb-10">
@@ -424,9 +424,9 @@ function Hero() {
                     animation: `slide-up-in 0.8s cubic-bezier(0.22,1,0.36,1) ${0.1 + i * 0.1}s both`,
                   }}
                 >
-                  {i === 1 ? (
+                  {i === 2 ? (
                     <>
-                      con <span className="text-[#F4B3BD]">estrategia</span>
+                      a <span className="text-[#F4B3BD]">contarlo.</span>
                     </>
                   ) : (
                     line
@@ -437,16 +437,15 @@ function Hero() {
           </h1>
 
           <p className="mx-auto mt-4 max-w-xl text-xs leading-relaxed text-white/90 md:mt-5 md:text-sm" style={{ textShadow: "0 2px 8px rgba(0,0,0,0.35)" }}>
-            Me encargo de campañas digitales, reels, diseño gráfico y gestión de RRSS
-            para que tú te enfoques en tu negocio.
+            Estrategia, producción y contenido para marcas que quieren conectar y crecer en redes.
           </p>
 
           <div className="mt-6 flex flex-wrap items-center justify-center gap-4">
             <a
-              href="#contacto"
+              href="#planes"
               className="group animate-pulse-btn inline-flex items-center gap-2.5 rounded-full bg-white px-6 py-3 text-xs font-bold text-[#8B1743] shadow-xl transition-all hover:-translate-y-0.5"
             >
-              Quiero empezar
+              Ver servicios
               <span className="inline-block h-1.5 w-1.5 rounded-full bg-[#8B1743] transition-transform group-hover:translate-x-1" />
             </a>
             <a
@@ -564,7 +563,7 @@ function Services() {
   const items = [
     {
       t: "Estrategia de contenido",
-      d: "Investigación, calendario editorial, definición de pilares de comunicación y tono de voz alineados con los objetivos de tu marca.",
+      d: "Investigación, calendario editorial, definición de pilares de comunicación y dirección creativa alineada con los objetivos de tu marca.",
       bg: "bg-[#FDF0F3]",
       text: "text-[#3D0E20]",
       border: "border-[#E8C9D0]/50",
@@ -573,7 +572,7 @@ function Services() {
     },
     {
       t: "Producción creativa",
-      d: "Grabación profesional, edición de Reels con color y subtítulos, diseño gráfico, carruseles, motion graphics y copywriting persuasivo.",
+      d: "Grabación profesional, dirección creativa, edición de Reels, diseño gráfico, motion graphics y copywriting.",
       bg: "bg-[#F4B3BD]",
       text: "text-[#3D0E20]",
       border: "border-[#D86B86]/40",
@@ -582,7 +581,7 @@ function Services() {
     },
     {
       t: "Gestión y optimización",
-      d: "Programación, publicación, stories, reporte mensual de métricas y mejora continua basada en resultados reales.",
+      d: "Programación, publicación, stories, análisis de métricas y optimización continua basada en resultados.",
       bg: "bg-[#2D0A18]", // Deep burgundy
       text: "text-white",
       border: "border-white/10",
@@ -601,9 +600,9 @@ function Services() {
               className="font-display font-medium max-w-3xl"
               style={{ fontSize: "clamp(2rem, 5.5vw, 4.5rem)", letterSpacing: "-0.035em", lineHeight: 1 }}
             >
-              Lo que hago: un servicio completo
+              Lo que hago: contenido con estrategia,
               <br />
-              <em className="not-italic font-medium text-foreground/60">sin intermediarios.</em>
+              <em className="not-italic font-medium text-foreground/60">de principio a fin.</em>
             </h2>
           </div>
         </Reveal>
@@ -876,22 +875,22 @@ function Onboarding() {
     {
       t: "Descubrimiento",
       w: "Paso 1",
-      d: "Reunión de descubrimiento: objetivos, público y propuesta de valor.",
+      d: "Reunión para conocer la marca, objetivos, público y necesidades.",
     },
     {
-      t: "Auditoría & Análisis",
+      t: "Auditoría y análisis",
       w: "Paso 2",
-      d: "Auditoría de redes sociales y análisis básico de la competencia.",
+      d: "Revisión de redes sociales, contenido actual y referentes/competencia.",
     },
     {
-      t: "Estilo & Comunicación",
+      t: "Estilo y comunicación",
       w: "Paso 3",
-      d: "Definición del estilo visual y línea de comunicación de la marca.",
+      d: "Definición de dirección visual, tono y líneas de comunicación.",
     },
     {
       t: "Plan de contenido",
       w: "Paso 4",
-      d: "Planificación del contenido del primer mes, flujo de trabajo y calendario de producción.",
+      d: "Planificación del primer mes, pilares de contenido y calendario.",
     },
   ];
 
@@ -946,9 +945,10 @@ function Onboarding() {
             El Onboarding Estratégico permite construir una estrategia personalizada antes de iniciar la producción de contenido. Este proceso asegura que todo el material tenga coherencia con los objetivos de la marca.
           </p>
           <div className="mt-6 inline-flex items-center gap-3 rounded-2xl border border-magenta/30 bg-magenta/10 px-6 py-3">
-            <span className="font-display text-2xl font-bold text-magenta md:text-3xl" style={{ letterSpacing: "-0.03em" }}>S/ 300–350</span>
+            <span className="font-display text-2xl font-bold text-magenta md:text-3xl" style={{ letterSpacing: "-0.03em" }}>S/ 350</span>
             <span className="text-sm text-foreground/70">pago único</span>
           </div>
+          <p className="mt-3 text-sm font-medium text-magenta/80 italic">Sin costo al contratar un plan mensual de 3 meses.</p>
         </Reveal>
 
         <div className="mt-16 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4 md:mt-24 lg:gap-5">
@@ -1240,60 +1240,145 @@ function Reviews() {
 
 /* ---------------- Pricing ---------------- */
 function Pricing() {
-  const plans = [
+  const creationPlans = [
     {
-      tag: "Plan Esencial",
-      sub: "Ideal para emprendimientos y marcas personales que necesitan empezar a verse profesionales.",
-      price: "S/ 650",
-      reg: "Precio regular: S/ 850",
+      tag: "✦ Esencial",
+      sub: "Para marcas que necesitan contenido constante sin contratar una gestión completa.",
+      price: "S/ 750",
+      priceRegular: "S/ 950",
+      priceNote: "por 3 meses",
       bullets: [
-        "Reunión de planificación mensual",
-        "Calendario de contenido",
-        "1 sesión de grabación al mes (2 horas)",
-        "Grabación con cámara profesional",
-        "4 Reels con edición profesional",
-        "8 piezas gráficas (carruseles o posts)",
-        "Redacción de todos los copies",
-        "Programación y publicación",
-        "2–3 stories por semana",
+        "Reunión mensual de planificación",
+        "1 sesión de grabación de hasta 3 a 4 horas",
+        "Grabación con equipo profesional",
+        "Copywriting",
+        "Subtítulos",
+        "Edición",
+        "1 ronda de cambios",
+        "Entrega de archivos finales",
+        "Sugerencia de días y horarios óptimos para publicar",
       ],
+      contentCount: "8 contenidos",
+      distributions: [
+        "4 Reels + 4 piezas gráficas",
+        "6 Reels + 2 piezas gráficas",
+        "8 Reels",
+      ],
+      distributionNote: "",
+      note: "No incluye publicación ni stories.",
       highlight: false,
     },
     {
-      tag: "Plan Crecimiento",
-      sub: "Ideal para marcas que buscan mantener una presencia constante y profesional en redes sociales.",
-      price: "S/ 900",
-      reg: "Precio regular: S/ 1,050",
+      tag: "⭐ Crecimiento",
+      sub: "Para marcas que quieren una producción más constante y estratégica.",
+      price: "S/ 1,150",
+      priceRegular: "S/ 1,450",
+      priceNote: "por 3 meses",
       bullets: [
-        "Investigación mensual y calendario editorial",
-        "2 sesiones de grabación al mes (hasta 4 h)",
-        "12 diseños, carruseles y portadas de reels",
-        "8 Reels con edición profesional y color",
-        "Motion Graphics sencillos y subtítulos",
-        "Copies persuasivos, CTA y SEO para IG",
-        "Programación, publicación y reporte mensual",
-        "20 stories mensuales",
+        "Reunión de planificación de grabación mensual",
+        "Investigación de tendencias y referencias",
+        "1 sesión de grabación de hasta 5 horas",
+        "Dirección creativa",
+        "Grabación con equipo profesional",
+        "Copywriting estratégico + CTA",
+        "Edición de color",
+        "Subtítulos",
+        "Motion graphics simples",
+        "1 ronda de cambios",
+        "Sugerencia de días y horarios óptimos para publicar",
       ],
+      contentCount: "12 contenidos",
+      distributions: [
+        "6 Reels + 6 piezas gráficas",
+        "8 Reels + 4 piezas gráficas",
+        "10 Reels + 2 piezas gráficas",
+      ],
+      distributionNote: "",
+      note: "No incluye publicación ni stories.",
       highlight: true,
     },
     {
-      tag: "Plan Marca",
-      sub: "Servicio casi boutique para posicionarte como referente de alto valor.",
-      price: "S/ 1,450",
-      reg: "Precio regular: S/ 1,700",
+      tag: "✦ Marca",
+      sub: "Para marcas que necesitan una producción visual más completa.",
+      price: "S/ 1,650",
+      priceRegular: "S/ 1,900",
+      priceNote: "por 3 meses",
       bullets: [
-        "Estrategia mensual y revisión de métricas",
-        "Hasta 3 sesiones de grabación mensuales",
-        "Producción completa y dirección de arte",
-        "12 Reels con edición cinematográfica y color",
-        "16 piezas gráficas y carruseles premium",
-        "Diseño de motion graphics y subtítulos",
-        "Copywriting estratégico y storytelling",
-        "Reporte detallado y reunión mensual",
-        "Stories casi diarias",
+        "Reunión de planificación de grabación mensual",
+        "Investigación de tendencias y referencias",
+        "2 sesiones de grabación de hasta 4 horas",
+        "Dirección creativa y de arte",
+        "Grabación con equipo profesional",
+        "Estrategia y conceptualización de campañas",
+        "Copywriting + storytelling",
+        "Edición avanzada + color",
+        "Subtítulos",
+        "Motion graphics",
+        "1 ronda de cambios",
+        "Sugerencia de días y horarios óptimos para publicar",
       ],
+      contentCount: "14 contenidos",
+      distributions: [
+        "8 Reels + 6 piezas gráficas",
+        "10 Reels + 4 piezas gráficas",
+        "12 Reels + 2 piezas gráficas",
+      ],
+      distributionNote: "",
+      note: "No incluye publicación ni stories.",
       highlight: false,
     },
+  ];
+
+  const gestionLevels = [
+    {
+      name: "Básica",
+      price: "+S/ 150",
+      items: ["Programación", "Publicación", "8 stories mensuales", "Calendario de publicación"],
+    },
+    {
+      name: "Completa",
+      price: "+S/ 250",
+      items: ["Programación", "Publicación", "16 stories mensuales", "Calendario de publicación", "Reporte mensual"],
+    },
+    {
+      name: "Estratégica",
+      price: "+S/ 450",
+      items: [
+        "Todo lo anterior",
+        "Análisis de métricas",
+        "Reunión mensual de resultados",
+        "Recomendaciones de contenido",
+      ],
+    },
+  ];
+
+  const adTiers = [
+    {
+      name: "Prueba inicial",
+      budget: "S/ 500–700 al mes",
+      meta: "S/ 350–450",
+      google: "S/ 400–500",
+    },
+    {
+      name: "Recomendada",
+      budget: "S/ 900–1,300 al mes",
+      meta: "S/ 500–650",
+      google: "S/ 550–700",
+    },
+    {
+      name: "Crecimiento",
+      budget: "desde S/ 1,500 al mes",
+      meta: "desde S/ 750 (o 15%)",
+      google: "desde S/ 850 (o 17%)",
+    },
+  ];
+
+  const videoPackages = [
+    { qty: 4, full: 650, edit: 400 },
+    { qty: 6, full: 900, edit: 550 },
+    { qty: 8, full: 1150, edit: 700 },
+    { qty: 10, full: 1400, edit: 850 },
+    { qty: 12, full: 1650, edit: 1000 },
   ];
 
   return (
@@ -1309,12 +1394,23 @@ function Pricing() {
             <em className="not-italic font-medium text-magenta">tu etapa.</em>
           </h2>
           <p className="mt-6 max-w-2xl text-sm text-foreground/65">
-            Precios de lanzamiento. Antes de iniciar cualquier plan se realiza un Onboarding Estratégico (pago único S/ 300–350).
+            Antes de iniciar cualquier plan se realiza un Onboarding Estratégico (pago único S/ 350). Sin costo al contratar un plan mensual de 3 meses.
           </p>
         </Reveal>
 
-        <div className="mt-16 grid grid-cols-1 gap-5 md:grid-cols-3">
-          {plans.map((p, i) => (
+        {/* ─── 1. Creación de Contenido ─── */}
+        <Reveal className="mt-16">
+          <div className="mb-10 flex items-center gap-4">
+            <h3 className="font-display text-xl font-medium text-magenta md:text-2xl">1. Planes de Creación de Contenido</h3>
+            <span className="h-px flex-1 bg-foreground/15" />
+          </div>
+          <p className="text-sm text-foreground/60 max-w-2xl -mt-4 mb-10">
+            Este es el servicio principal. Aquí se piensa, produce y edita el contenido de tu marca.
+          </p>
+        </Reveal>
+
+        <div className="grid grid-cols-1 gap-5 md:grid-cols-3">
+          {creationPlans.map((p, i) => (
             <Reveal
               key={p.tag}
               delay={i * 80}
@@ -1329,16 +1425,21 @@ function Pricing() {
               <div className="font-display text-lg font-medium">{p.tag}</div>
               <p className="mt-2 text-sm text-foreground/60">{p.sub}</p>
 
-              <div className="mt-8 flex items-baseline gap-2">
-                <span
-                  className="font-display font-medium"
-                  style={{ fontSize: "clamp(2.5rem,4vw,3.5rem)", letterSpacing: "-0.04em", lineHeight: 1 }}
-                >
-                  {p.price}
-                </span>
-                <span className="text-sm text-foreground/55">/ 1er mes</span>
+              <div className="mt-8">
+                <div className="flex items-baseline gap-2">
+                  <span
+                    className="font-display font-medium"
+                    style={{ fontSize: "clamp(2.5rem,4vw,3.5rem)", letterSpacing: "-0.04em", lineHeight: 1 }}
+                  >
+                    {p.price}
+                  </span>
+                  <span className="text-sm text-foreground/55">{p.priceNote}</span>
+                </div>
+                <div className="mt-1.5 flex items-center gap-2">
+                  <span className="text-sm text-foreground/40 line-through">{p.priceRegular}</span>
+                  <span className="text-xs text-foreground/50">precio regular</span>
+                </div>
               </div>
-              <div className="mt-1 text-xs text-foreground/45">{p.reg}</div>
 
               <ul className="mt-8 flex-1 space-y-3 border-t border-foreground/15 pt-6 text-sm">
                 {p.bullets.map((b) => (
@@ -1352,11 +1453,30 @@ function Pricing() {
                 ))}
               </ul>
 
+              {/* Distribution options */}
+              <div className="mt-6 rounded-2xl border border-foreground/10 bg-foreground/[0.02] p-5">
+                <div className="text-xs font-semibold uppercase tracking-widest text-foreground/50 mb-3">
+                  {p.contentCount ? `${p.contentCount} — ` : ""}Puedes elegir:
+                </div>
+                {p.distributions.map((d) => (
+                  <div key={d} className="flex items-start gap-2 text-sm text-foreground/70 mb-1.5">
+                    <span className="text-magenta mt-0.5">●</span>
+                    <span>{d}</span>
+                  </div>
+                ))}
+                {p.distributionNote && (
+                  <p className="mt-3 text-[11px] text-foreground/45 italic">{p.distributionNote}</p>
+                )}
+              </div>
+
+              {/* Note */}
+              <p className="mt-4 text-xs font-medium text-foreground/50 italic">{p.note}</p>
+
               <a
-                href={`https://wa.me/51994404466?text=Hola,%20me%20interesa%20el%20${encodeURIComponent(p.tag)}`}
+                href={`https://wa.me/51994404466?text=Hola,%20me%20interesa%20el%20plan%20${encodeURIComponent(p.tag)}`}
                 target="_blank"
                 rel="noreferrer"
-                className={`mt-10 inline-flex items-center justify-between rounded-full px-5 py-3 text-sm transition ${p.highlight
+                className={`mt-8 inline-flex items-center justify-between rounded-full px-5 py-3 text-sm transition ${p.highlight
                   ? "bg-magenta text-magenta-foreground hover:scale-[1.02]"
                   : "border border-foreground/20 text-foreground hover:border-magenta hover:text-magenta"
                   }`}
@@ -1368,102 +1488,306 @@ function Pricing() {
           ))}
         </div>
 
+        {/* ─── 2. Gestión de Contenido ─── */}
         <Reveal className="mt-24">
           <div className="mb-10 flex items-center gap-4">
-            <h3 className="font-display text-xl font-medium text-magenta md:text-2xl">Extras</h3>
-            <span className="text-xs uppercase tracking-[0.3em] text-foreground/55">Add-ons</span>
+            <h3 className="font-display text-xl font-medium text-magenta md:text-2xl">2. Planes de Gestión de Contenido</h3>
+            <span className="text-xs uppercase tracking-[0.3em] text-foreground/55 ml-2">Add-on</span>
+            <span className="h-px flex-1 bg-foreground/15" />
+          </div>
+          <p className="text-sm text-foreground/60 max-w-2xl -mt-4 mb-4">
+            Servicio complementario. Se puede añadir a cualquiera de los planes de creación, desde S/ 150 adicionales al mes.
+          </p>
+          <div className="inline-flex items-center gap-3 rounded-2xl border border-magenta/30 bg-magenta/10 px-5 py-2.5 mb-10">
+            <span className="font-display text-lg font-bold text-magenta">Desde S/ 150</span>
+            <span className="text-sm text-foreground/70">adicionales al mes</span>
+          </div>
+        </Reveal>
+
+        <div className="grid grid-cols-1 gap-5 md:grid-cols-3">
+          {gestionLevels.map((g, i) => (
+            <Reveal key={g.name} delay={i * 80}>
+              <div
+                className={`relative flex flex-col rounded-3xl border p-8 md:p-10 transition-all duration-500 hover:-translate-y-2 hover:shadow-xl ${i === 2 ? "border-magenta bg-[#FDF0F3]" : "border-foreground/15 bg-white"
+                  }`}
+              >
+                <div className="font-display text-lg font-medium">{g.name}</div>
+                <div className="mt-3 flex items-baseline gap-1">
+                  <span
+                    className="font-display text-3xl font-medium text-magenta"
+                    style={{ letterSpacing: "-0.03em" }}
+                  >
+                    {g.price}
+                  </span>
+                  <span className="text-sm text-foreground/55">/ mes</span>
+                </div>
+                <ul className="mt-6 flex-1 space-y-2.5 border-t border-foreground/15 pt-5 text-sm">
+                  {g.items.map((item) => (
+                    <li key={item} className="flex items-start gap-3">
+                      <span className="mt-2 inline-block h-1 w-1 rounded-full bg-magenta" />
+                      <span className="text-foreground/75">{item}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </Reveal>
+          ))}
+        </div>
+
+        {/* Combination note */}
+        <Reveal className="mt-12">
+          <div className="rounded-2xl border border-foreground/10 bg-foreground/[0.02] p-8 text-center max-w-2xl mx-auto">
+            <p className="text-sm text-foreground/70">
+              Puedes elegir:{" "}
+              <strong className="text-foreground">Creación de contenido + Gestión</strong>{" "}
+              o solamente:{" "}
+              <strong className="text-foreground">Creación de contenido.</strong>
+            </p>
+          </div>
+        </Reveal>
+
+        {/* ─── 3. Servicios Extra ─── */}
+        <Reveal className="mt-24">
+          <div className="mb-10 flex items-center gap-4">
+            <h3 className="font-display text-xl font-medium text-magenta md:text-2xl">3. Servicios Extra</h3>
             <span className="h-px flex-1 bg-foreground/15" />
           </div>
 
-          <div className="flex flex-wrap justify-center gap-6">
+          <div className="grid grid-cols-1 gap-5 md:grid-cols-3">
             {[
-              ["Reel adicional", "S/ 150", "Incluye grabación, edición profesional, subtítulos y copy."],
-              ["Pack de 5 stories", "S/ 60", "Diseño, edición y copy."],
-              ["Grabación adicional", "S/ 400", "Con equipo profesional de grabación."],
-              ["Cobertura de eventos", "Desde S/ 600", "Creación de contenido durante eventos."],
-              ["Sesión de fotografía", "Desde S/ 350", "Ideal para e-commerce, gastronomía, moda y belleza."],
-              ["Gestión de Meta Ads", "Desde S/ 400", "Administración y optimización mensual."],
-              ["Entrega prioritaria (24 h)", "+30 %", "Recargo del 30 % sobre el servicio."],
-            ].map(([t, p, d], i) => {
-              const styles = [
+              {
+                t: "Pack 5 stories",
+                p: "S/ 60",
+                d: "Algunos en bloques de 3: portada, contenido principal, cierre + CTA.",
+              },
+              {
+                t: "Cobertura de eventos",
+                p: "Desde S/ 200",
+                d: "Primeras 3h cubiertas: S/ 200. Hora adicional: S/ 90. El cliente cubre movilidad.",
+              },
+              {
+                t: "Entrega prioritaria 24h",
+                p: "+30%",
+                d: "Recibe tu contenido en 24 horas con un recargo del 30% sobre el servicio.",
+              },
+            ].map(({ t, p, d }, i) => {
+              const cardStyles = [
                 {
                   bg: "bg-gradient-to-br from-[#2D0A18] to-[#6F123B]",
                   text: "text-white",
                   sub: "text-white/70",
                   num: "text-white/10",
                   border: "border-[#8B1743]/50",
-                  rot: "md:-rotate-2",
                 },
                 {
                   bg: "bg-gradient-to-br from-[#8B1743] to-[#C93B69]",
                   text: "text-white",
-                  sub: "text-white/85",
+                  sub: "text-white/80",
                   num: "text-white/20",
                   border: "border-[#D86B86]/40",
-                  rot: "md:rotate-2",
                 },
                 {
                   bg: "bg-gradient-to-br from-[#D86B86] to-[#F4B3BD]",
                   text: "text-[#3D0E20]",
-                  sub: "text-[#3D0E20]/80",
+                  sub: "text-[#3D0E20]/70",
                   num: "text-[#3D0E20]/15",
                   border: "border-white/40",
-                  rot: "md:-rotate-1",
-                },
-                {
-                  bg: "bg-gradient-to-br from-[#FDF0F3] to-[#FFFFFF]",
-                  text: "text-[#6F123B]",
-                  sub: "text-[#6F123B]/70",
-                  num: "text-[#6F123B]/10",
-                  border: "border-white shadow-xl",
-                  rot: "md:rotate-3",
                 },
               ];
-              const st = styles[i % styles.length];
+              const st = cardStyles[i];
               return (
                 <div
                   key={t}
-                  className={`group relative flex min-h-[340px] w-full sm:w-[calc(50%-12px)] lg:w-[calc(25%-18px)] flex-col justify-between overflow-hidden rounded-[2rem] border ${st.border} ${st.bg} p-8 shadow-lg transition-all duration-500 ease-out hover:-translate-y-4 hover:scale-[1.03] hover:shadow-2xl hover:rotate-0`}
+                  className={`group relative flex min-h-[280px] flex-col justify-between overflow-hidden rounded-[2rem] border ${st.border} ${st.bg} p-8 shadow-lg transition-all duration-500 ease-out hover:-translate-y-4 hover:scale-[1.03] hover:shadow-2xl`}
                 >
-                  {/* Binder holes styling element */}
                   <div className="absolute left-6 top-6 flex flex-col gap-3 opacity-30 mix-blend-multiply">
                     <div className="h-3 w-3 rounded-full bg-current shadow-inner" />
                     <div className="h-3 w-3 rounded-full bg-current shadow-inner" />
                   </div>
 
                   <div className="relative z-10 mt-6">
-                    <h3 className={`font-display text-2xl font-extrabold leading-tight tracking-tight ${st.text}`}>
-                      {t}
-                    </h3>
+                    <h4 className={`font-display text-2xl font-extrabold leading-tight tracking-tight ${st.text}`}>{t}</h4>
+                    <p className={`mt-3 text-sm leading-relaxed ${st.sub}`}>{d}</p>
                     <a
-                      href={`https://wa.me/51994404466?text=Hola,%20me%20interesa%20cotizar%20el%20add-on:%20${encodeURIComponent(t)}`}
+                      href={`https://wa.me/51994404466?text=Hola,%20me%20interesa%20cotizar:%20${encodeURIComponent(t)}`}
                       target="_blank"
                       rel="noreferrer"
-                      className={`mt-3 font-serif italic text-lg inline-block transition-transform hover:translate-x-1 ${st.text}`}
+                      className={`mt-4 font-serif italic text-lg inline-block transition-transform hover:translate-x-1 ${st.text}`}
                     >
                       {p} <span className="text-sm">→</span>
                     </a>
-                    <p className={`mt-6 text-sm leading-relaxed ${st.sub}`}>{d}</p>
                   </div>
 
-                  {/* Big background plus sign */}
-                  <div
-                    className={`absolute -bottom-8 -right-4 font-display text-[10rem] font-black leading-none ${st.num} transition-transform duration-700 ease-out group-hover:scale-110 group-hover:-translate-x-2 group-hover:-translate-y-2`}
-                  >
+                  <div className={`absolute -bottom-8 -right-4 font-display text-[10rem] font-black leading-none ${st.num} transition-transform duration-700 ease-out group-hover:scale-110 group-hover:-translate-x-2 group-hover:-translate-y-2`}>
                     +
                   </div>
-
-                  {/* Subtle glass reflection overlay */}
                   <div className="pointer-events-none absolute inset-0 bg-gradient-to-tr from-white/0 via-white/10 to-white/0 opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
                 </div>
               );
             })}
           </div>
         </Reveal>
+
+        {/* ─── 4. Gestión de Pauta Publicitaria ─── */}
+        <Reveal className="mt-24">
+          <div className="mb-10 flex items-center gap-4">
+            <h3 className="font-display text-xl font-medium text-magenta md:text-2xl">4. Gestión de Pauta Publicitaria</h3>
+            <span className="text-xs uppercase tracking-[0.3em] text-foreground/55 ml-2">Meta Ads · Google Ads</span>
+            <span className="h-px flex-1 bg-foreground/15" />
+          </div>
+          <p className="text-sm text-foreground/60 max-w-3xl -mt-4 mb-10">
+            El fee de gestión es independiente del presupuesto de pauta, que se paga directamente a la plataforma (Meta o Google). Estos precios aplican para la gestión de una sola plataforma.
+          </p>
+
+          <div className="overflow-x-auto">
+            <table className="w-full min-w-[640px] text-sm border-collapse">
+              <thead>
+                <tr className="border-b border-foreground/15">
+                  <th className="text-left py-4 pr-6 font-display font-medium text-foreground/70 uppercase text-xs tracking-widest">Nivel</th>
+                  <th className="text-left py-4 pr-6 font-display font-medium text-foreground/70 uppercase text-xs tracking-widest">Pauta mensual</th>
+                  <th className="text-left py-4 pr-6 font-display font-medium text-foreground/70 uppercase text-xs tracking-widest">Fee Meta Ads</th>
+                  <th className="text-left py-4 font-display font-medium text-foreground/70 uppercase text-xs tracking-widest">Fee Google Ads</th>
+                </tr>
+              </thead>
+              <tbody>
+                {adTiers.map((tier, i) => (
+                  <tr key={tier.name} className={`border-b border-foreground/10 transition-colors hover:bg-foreground/[0.02] ${i === 1 ? "bg-magenta/[0.03]" : ""}`}>
+                    <td className="py-4 pr-6 font-display font-medium">{tier.name}</td>
+                    <td className="py-4 pr-6 text-foreground/70">{tier.budget}</td>
+                    <td className="py-4 pr-6 font-medium text-magenta">{tier.meta}</td>
+                    <td className="py-4 font-medium text-magenta">{tier.google}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <p className="mt-4 text-xs text-foreground/50 italic">
+            Incluye monitoreo semanal, optimización y reporte mensual de resultados. El monto de la pauta queda sujeto al presupuesto del cliente.
+          </p>
+        </Reveal>
+
+        {/* ─── 5. Contenido Mensual para Creadoras ─── */}
+        <Reveal className="mt-24">
+          <div className="mb-10 flex items-center gap-4">
+            <h3 className="font-display text-xl font-medium text-magenta md:text-2xl">5. Contenido Mensual para Creadoras</h3>
+            <span className="rounded-full bg-magenta/15 border border-magenta/30 px-3 py-0.5 text-[10px] font-bold uppercase tracking-widest text-magenta ml-2">Nuevo</span>
+            <span className="h-px flex-1 bg-foreground/15" />
+          </div>
+          <p className="text-sm text-foreground/60 max-w-2xl -mt-4 mb-4">
+            Conceptualizo, guionizo, grabo y edito. Para influencers y creadoras de contenido, no marcas.
+          </p>
+
+          <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+            {/* Main plan card */}
+            <div className="relative flex flex-col rounded-3xl border border-magenta bg-white p-8 md:p-10 overflow-hidden">
+              <div className="font-display text-lg font-medium">🎬 Plan Creadoras</div>
+              <p className="mt-2 text-sm text-foreground/60">10 videos por mes</p>
+
+              <div className="mt-6 flex items-baseline gap-2">
+                <span className="font-display font-medium text-magenta" style={{ fontSize: "clamp(2.5rem,4vw,3.5rem)", letterSpacing: "-0.04em", lineHeight: 1 }}>
+                  S/ 1,300
+                </span>
+                <span className="text-sm text-foreground/55">/ mes</span>
+              </div>
+
+              <ul className="mt-8 flex-1 space-y-3 border-t border-foreground/15 pt-6 text-sm">
+                {[
+                  "Desarrollo de 10 ideas y guiones",
+                  "Edición profesional de 10 videos",
+                  "1 reunión breve de planificación mensual",
+                  "Subtítulos",
+                  "1 jornada de grabación de hasta 4 horas",
+                  "Música/sonidos y recursos de edición",
+                  "Grabación con equipo profesional",
+                  "Entrega optimizada: TikTok, Reels, Shorts",
+                  "Dirección durante la grabación",
+                  "1 ronda de cambios por video",
+                ].map((b) => (
+                  <li key={b} className="flex items-start gap-3">
+                    <span className="mt-2 inline-block h-1 w-1 rounded-full bg-magenta" />
+                    <span className="text-foreground/80">{b}</span>
+                  </li>
+                ))}
+              </ul>
+
+              <div className="mt-6 rounded-2xl border border-foreground/10 bg-foreground/[0.02] p-5">
+                <div className="text-xs font-semibold uppercase tracking-widest text-foreground/50 mb-3">No incluye:</div>
+                <p className="text-sm text-foreground/60">
+                  Publicación, community management, fotografía, modelos ni traslados fuera de Lima. La gestión de contenido se cotiza aparte.
+                </p>
+              </div>
+
+              <p className="mt-4 text-xs text-foreground/50 italic">
+                Si el contenido requiere más producción (cambios de vestuario, varias locaciones, storytelling, props), el rango sube a S/ 1,500–1,700.
+              </p>
+
+              <a
+                href="https://wa.me/51994404466?text=Hola,%20me%20interesa%20el%20plan%20para%20creadoras"
+                target="_blank"
+                rel="noreferrer"
+                className="mt-8 inline-flex items-center justify-between rounded-full bg-magenta px-5 py-3 text-sm text-magenta-foreground transition hover:scale-[1.02]"
+              >
+                Quiero este plan
+                <span>→</span>
+              </a>
+            </div>
+
+            {/* Video packages */}
+            <div className="relative flex flex-col rounded-3xl border border-foreground/15 bg-white p-8 md:p-10">
+              <div className="font-display text-lg font-medium">📦 Paquete por cantidad de videos</div>
+              <p className="mt-2 text-sm text-foreground/60">
+                Precios cerrados según la cantidad de videos que necesites, sin plan mensual ni permanencia.
+              </p>
+
+              <div className="mt-8 space-y-6 flex-1">
+                {/* Producción completa */}
+                <div>
+                  <div className="text-xs font-semibold uppercase tracking-widest text-foreground/50 mb-4">
+                    Producción completa <span className="normal-case tracking-normal font-normal">(idea + guion + grabación + edición)</span>
+                  </div>
+                  <div className="space-y-2">
+                    {videoPackages.map((pkg) => (
+                      <div key={`full-${pkg.qty}`} className="flex items-center justify-between rounded-xl bg-foreground/[0.02] border border-foreground/10 px-5 py-3 transition-colors hover:bg-magenta/[0.03]">
+                        <span className="text-sm font-medium">{pkg.qty} videos</span>
+                        <span className="font-display font-medium text-magenta">S/ {pkg.full.toLocaleString()}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Solo edición */}
+                <div>
+                  <div className="text-xs font-semibold uppercase tracking-widest text-foreground/50 mb-4">
+                    Solo edición <span className="normal-case tracking-normal font-normal">(el cliente entrega el material grabado)</span>
+                  </div>
+                  <div className="space-y-2">
+                    {videoPackages.map((pkg) => (
+                      <div key={`edit-${pkg.qty}`} className="flex items-center justify-between rounded-xl bg-foreground/[0.02] border border-foreground/10 px-5 py-3 transition-colors hover:bg-magenta/[0.03]">
+                        <span className="text-sm font-medium">{pkg.qty} videos</span>
+                        <span className="font-display font-medium text-magenta">S/ {pkg.edit.toLocaleString()}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              <a
+                href="https://wa.me/51994404466?text=Hola,%20me%20interesa%20cotizar%20un%20paquete%20de%20videos"
+                target="_blank"
+                rel="noreferrer"
+                className="mt-8 inline-flex items-center justify-between rounded-full border border-foreground/20 px-5 py-3 text-sm text-foreground transition hover:border-magenta hover:text-magenta"
+              >
+                Cotizar paquete
+                <span>→</span>
+              </a>
+            </div>
+          </div>
+        </Reveal>
       </div>
     </section>
   );
 }
+
 
 /* ---------------- Contact ---------------- */
 function Contact() {
