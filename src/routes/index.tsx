@@ -1246,7 +1246,7 @@ function Pricing() {
       sub: "Para marcas que necesitan contenido constante sin contratar una gestión completa.",
       price: "S/ 750",
       priceRegular: "S/ 950",
-      priceNote: "por 3 meses",
+      priceNote: "mensuales durante los primeros 3 meses",
       bullets: [
         "Reunión mensual de planificación",
         "1 sesión de grabación de hasta 3 a 4 horas",
