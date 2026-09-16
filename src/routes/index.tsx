@@ -1273,7 +1273,7 @@ function Pricing() {
       sub: "Para marcas que quieren una producción más constante y estratégica.",
       price: "S/ 1,150",
       priceRegular: "S/ 1,450",
-      priceNote: "por 3 meses",
+      priceNote: "mensuales durante los primeros 3 meses",
       bullets: [
         "Reunión de planificación de grabación mensual",
         "Investigación de tendencias y referencias",
@@ -1302,7 +1302,7 @@ function Pricing() {
       sub: "Para marcas que necesitan una producción visual más completa.",
       price: "S/ 1,650",
       priceRegular: "S/ 1,900",
-      priceNote: "por 3 meses",
+      priceNote: "mensuales durante los primeros 3 meses",
       bullets: [
         "Reunión de planificación de grabación mensual",
         "Investigación de tendencias y referencias",
