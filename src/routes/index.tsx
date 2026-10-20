@@ -1,101 +1,155 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useCallback, useEffect, useRef, useState } from "react";
+import useEmblaCarousel from "embla-carousel-react";
 import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { useGSAP } from "@gsap/react";
 import {
   Instagram,
   Linkedin,
   Mail,
   Smartphone,
-  Sparkles,
+  ArrowUpRight,
+  Target,
   Palette,
   Video,
   Megaphone,
-  Target,
+  Sparkles,
   TrendingUp,
-  Camera,
-  Layers,
-  Film,
-  Star,
-  Zap,
+  CircleCheck,
   ArrowLeft,
   ArrowRight,
+  Plus,
+  Check,
+  Sparkle,
+  Gem,
+  CalendarDays,
+  LayoutGrid,
+  ChartLine,
+  Layers,
+  Camera,
+  Clock,
+  FlaskConical,
+  Rocket,
+  Clapperboard,
+  Scissors,
+  type LucideIcon,
 } from "lucide-react";
 
-gsap.registerPlugin(ScrollTrigger);
+const SEO_TITLE = "Anna González · Estudio Creativo de Marketing y Redes en Lima";
+const SEO_DESCRIPTION =
+  "Estudio Creativo: gestión de redes sociales, producción de reels, diseño y pauta en Meta y Google Ads para marcas de moda y belleza.";
 
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Ani Creative Studio Agencia Creativa de Marketing" },
+      { title: SEO_TITLE },
+      { name: "description", content: SEO_DESCRIPTION },
       {
-        name: "description",
-        content:
-          "Gestión integral de redes sociales para pequeñas y medianas marcas. Estrategia, diseño, edición, publicación y análisis todo en una sola persona.",
+        property: "og:title",
+        content: "Anna González · Contenido que vende, estética que se recuerda",
       },
-      { property: "og:title", content: "Ani Creative Studio Agencia Creativa de Marketing" },
       {
         property: "og:description",
-        content: "Gestión integral de redes sociales para pequeñas y medianas marcas.",
+        content:
+          "Estrategia, producción audiovisual y gestión de redes sociales para marcas que quieren crecer en digital.",
       },
     ],
   }),
   component: LandingPage,
 });
 
-/* ---------------- Preloader ---------------- */
-function Preloader() {
+/* ---------------- Preloader (Agile & Lundani Styled) ---------------- */
+function Preloader({ onReady }: { onReady?: () => void }) {
   const [n, setN] = useState(0);
   const [gone, setGone] = useState(false);
   const [leaving, setLeaving] = useState(false);
 
   useEffect(() => {
     if (n >= 100) {
-      const t1 = setTimeout(() => setLeaving(true), 250);
-      const t2 = setTimeout(() => setGone(true), 1100);
+      const t1 = setTimeout(() => {
+        setLeaving(true);
+        if (onReady) onReady();
+      }, 450);
+      const t2 = setTimeout(() => setGone(true), 1300);
       return () => {
         clearTimeout(t1);
         clearTimeout(t2);
       };
     }
-    const step = n < 70 ? 22 : n < 90 ? 45 : 70;
-    const t = setTimeout(() => setN((v) => Math.min(100, v + Math.ceil(Math.random() * 7) + 1)), step);
+    // Conteo pausado (~1.6s) para que la animación se aprecie
+    const t = setTimeout(() => {
+      setN((v) => Math.min(100, v + Math.ceil(Math.random() * 4) + 1));
+    }, 45);
     return () => clearTimeout(t);
-  }, [n]);
+  }, [n, onReady]);
 
   if (gone) return null;
   return (
     <div
       aria-hidden
-      className="fixed inset-0 z-[100] flex items-end justify-between bg-ink px-6 pb-8 text-ink-foreground md:px-12 md:pb-12"
+      className="fixed inset-0 z-[100] flex flex-col justify-between bg-[#F8F7F4] p-6 text-[#171715] md:p-12 transition-transform duration-[850ms] ease-[cubic-bezier(0.7,0,0.2,1)]"
       style={{
         transform: leaving ? "translateY(-100%)" : "translateY(0)",
-        transition: "transform 0.9s cubic-bezier(0.7,0,0.2,1)",
       }}
     >
-      <img src="/logo.png" alt="Ani Creative Studio" className="h-12 w-auto md:h-16 mb-2" />
-      <span
-        className="font-display tabular-nums text-white"
-        style={{ fontSize: "clamp(4rem, 14vw, 12rem)", lineHeight: 1, letterSpacing: "-0.04em" }}
-      >
-        {String(n).padStart(3, "0")}
-        <span className="text-white/40">%</span>
-      </span>
+      <div className="flex items-center justify-between border-b border-[#D8D4CC] pb-4">
+        <span className="font-display text-xl tracking-tight text-[#171715]">ANNA GONZÁLEZ</span>
+        <span className="text-[11px] font-sans uppercase tracking-[0.2em] text-[#77746E]">
+          Cargando
+        </span>
+      </div>
+
+      <div className="flex items-end justify-between">
+        <span className="font-display text-xl md:text-2xl tracking-tight text-[#171715]/40 uppercase">
+          Studio
+        </span>
+        <div
+          className="flex items-baseline font-display tabular-nums text-[#171715]"
+          style={{ fontSize: "clamp(3.5rem, 12vw, 10rem)", lineHeight: 0.9 }}
+        >
+          <span>{String(n).padStart(3, "0")}</span>
+          <span className="text-[#171715]/40 text-[0.4em] ml-1">%</span>
+        </div>
+      </div>
     </div>
   );
 }
 
-/* ---------------- Nav ---------------- */
+/* ---------------- Navigation ---------------- */
 function Nav() {
   const links = [
     ["Inicio", "#home"],
-    ["Sobre mí", "#porque"],
+    ["Servicios", "#servicios"],
     ["Trabajos", "#trabajos"],
-    /*  ["Testimonios", "#reviews"],*/
+    ["Sobre mí", "#porque"],
+    ["Proceso", "#onboarding"],
     ["Planes", "#planes"],
+    ["Contacto", "#contacto"],
   ];
   const [open, setOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+  /* La barra es transparente: si debajo hay una sección oscura, el texto pasa a blanco */
+  const [onDark, setOnDark] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 40);
+      const y = 36;
+      const under = Array.from(document.querySelectorAll<HTMLElement>("main > *")).find((el) => {
+        const r = el.getBoundingClientRect();
+        return r.top <= y && r.bottom > y;
+      });
+      setOnDark(!!under?.hasAttribute("data-nav-dark"));
+    };
+    handleScroll();
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    window.addEventListener("resize", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener("resize", handleScroll);
+    };
+  }, []);
+
+  const ink = onDark ? "text-white" : "text-[#171715]";
 
   const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
     e.preventDefault();
@@ -106,109 +160,125 @@ function Nav() {
     }
     const target = document.querySelector(href);
     if (target) {
-      ScrollTrigger.refresh();
-      const st = ScrollTrigger.getAll().find((s) => s.trigger === target || s.vars.trigger === target);
-      const top = st ? st.start : target.getBoundingClientRect().top + window.scrollY;
+      const margin = parseFloat(getComputedStyle(target).scrollMarginTop) || 0;
+      const top = target.getBoundingClientRect().top + window.scrollY - margin;
       window.scrollTo({ top, behavior: "smooth" });
     }
   };
 
   return (
-    <header className="fixed inset-x-0 top-4 z-50 flex justify-center px-4 md:top-6 pointer-events-none">
-      <div className="pointer-events-auto w-full max-w-5xl rounded-2xl border border-white/10 bg-[#3D0E20]/92 shadow-[0_8px_32px_rgba(61,14,32,0.35)] backdrop-blur-xl transition-all duration-500">
-        <div className="flex items-center justify-between px-5 py-3 md:px-8 md:py-3.5">
-          <a
-            href="#home"
-            onClick={(e) => handleNavClick(e, "#home")}
-            className="group transition-transform duration-300 hover:scale-105"
+    <header
+      className={`fixed inset-x-0 top-0 z-50 backdrop-blur-md transition-all duration-500 ${
+        scrolled ? "py-3.5" : "py-5"
+      } ${
+        onDark
+          ? "border-b border-white/10 bg-[#0E0E0D]/60"
+          : scrolled
+            ? "border-b border-[#171715]/10 bg-[#F8F7F4]/60"
+            : "border-b border-transparent bg-[#F8F7F4]/30"
+      }`}
+    >
+      <div className="mx-auto flex max-w-[1440px] items-center justify-between px-6 md:px-12">
+        {/* Brand / Logo */}
+        <a
+          href="#home"
+          onClick={(e) => handleNavClick(e, "#home")}
+          className="group flex items-center gap-3 transition-opacity hover:opacity-75"
+        >
+          <span
+            className={`font-display text-xl tracking-tight transition-colors duration-500 md:text-2xl ${ink}`}
           >
-            <img src="/logo.png" alt="Ani Creative Studio" className="h-6 w-auto md:h-9" />
-          </a>
+            ANNA GONZÁLEZ
+          </span>
+        </a>
 
-          <nav className="hidden items-center gap-9 md:flex">
-            {links.map(([l, h], i) => (
-              <a
-                key={h}
-                href={h}
-                onClick={(e) => handleNavClick(e, h)}
-                className="nav-link text-[13px] font-medium text-white/70 transition-colors hover:text-white"
-                style={{
-                  animation: `nav-link-in 0.6s cubic-bezier(0.22,1,0.36,1) ${0.1 + i * 0.07}s both`,
-                }}
-              >
-                {l}
-              </a>
-            ))}
-          </nav>
+        {/* Desktop Links (Lundani Style: uppercase minimal clean) */}
+        <nav className="hidden items-center gap-8 lg:flex">
+          {links.map(([label, href]) => (
+            <a
+              key={href}
+              href={href}
+              onClick={(e) => handleNavClick(e, href)}
+              className={`link-u text-xs font-medium uppercase tracking-[0.16em] transition-colors duration-500 ${
+                onDark ? "text-white/80 hover:text-white" : "text-[#171715]/80 hover:text-[#171715]"
+              }`}
+            >
+              {label}
+            </a>
+          ))}
+        </nav>
 
+        {/* CTA Button */}
+        <div className="hidden lg:block">
           <a
             href="#contacto"
             onClick={(e) => handleNavClick(e, "#contacto")}
-            className="hidden rounded-full bg-magenta px-5 py-2 text-[13px] font-medium text-white shadow-lg transition-all duration-300 hover:scale-[1.05] hover:shadow-xl md:inline-block"
-            style={{ animation: "pulse-glow 3s ease-in-out infinite, nav-link-in 0.6s cubic-bezier(0.22,1,0.36,1) 0.5s both" }}
+            className={`btn py-2 px-5 text-xs uppercase tracking-wider transition-colors duration-500 ${
+              onDark
+                ? "border border-white bg-white text-[#171715] hover:bg-[#F6E7EA]"
+                : "btn-solid"
+            }`}
           >
-            Contáctame
+            <span>Contáctame</span>
+            <span className="btn-arrow">→</span>
           </a>
-
-          <button
-            aria-label="Menu"
-            onClick={() => setOpen((v) => !v)}
-            className="flex h-9 w-9 flex-col items-center justify-center gap-1.5 md:hidden"
-          >
-            <span
-              className="h-[1.5px] w-5 rounded-full bg-white transition-all duration-300"
-              style={{
-                transform: open ? "translateY(3px) rotate(45deg)" : "translateY(0) rotate(0)",
-              }}
-            />
-            <span
-              className="h-[1.5px] w-5 rounded-full bg-white transition-all duration-300"
-              style={{
-                transform: open ? "translateY(-3px) rotate(-45deg)" : "translateY(0) rotate(0)",
-                opacity: open ? 1 : 1,
-              }}
-            />
-          </button>
         </div>
 
-        {/* Mobile menu drop-down inside the pill */}
-        <div
-          className="overflow-hidden md:hidden"
-          style={{
-            maxHeight: open ? "400px" : "0px",
-            opacity: open ? 1 : 0,
-            transition: "max-height 0.5s cubic-bezier(0.22,1,0.36,1), opacity 0.4s ease",
-          }}
+        {/* Mobile Hamburger */}
+        <button
+          aria-label="Abrir menú"
+          onClick={() => setOpen((v) => !v)}
+          className={`flex h-10 w-10 flex-col items-center justify-center gap-1.5 transition-colors duration-500 lg:hidden ${
+            open ? "text-[#171715]" : ink
+          }`}
         >
-          <div className="flex flex-col border-t border-white/10 px-6 pb-6 pt-2">
-            {links.map(([l, h], i) => (
-              <a
-                key={h}
-                href={h}
-                onClick={(e) => handleNavClick(e, h)}
-                className="border-b border-white/10 py-3 text-sm text-white/80 transition-all hover:pl-2 hover:text-white"
-                style={{
-                  animation: open ? `nav-link-in 0.4s ease ${i * 0.06}s both` : "none",
-                }}
-              >
-                {l}
-              </a>
-            ))}
+          <span
+            className="h-[1.5px] w-6 bg-current transition-transform duration-300"
+            style={{
+              transform: open ? "translateY(4.5px) rotate(45deg)" : "none",
+            }}
+          />
+          <span
+            className="h-[1.5px] w-6 bg-current transition-transform duration-300"
+            style={{
+              transform: open ? "translateY(-4.5px) rotate(-45deg)" : "none",
+            }}
+          />
+        </button>
+      </div>
+
+      {/* Mobile Menu Drawer */}
+      <div
+        className={`overflow-hidden border-b border-[#D8D4CC] bg-[#F8F7F4] transition-all duration-300 lg:hidden ${
+          open ? "max-h-[460px] opacity-100" : "max-h-0 opacity-0"
+        }`}
+      >
+        <div className="flex flex-col px-6 py-6 space-y-4">
+          {links.map(([label, href]) => (
             <a
-              href="#contacto"
-              onClick={(e) => handleNavClick(e, "#contacto")}
-              className="mt-5 inline-block rounded-full bg-magenta px-5 py-3 text-center text-sm font-medium text-white shadow-lg transition-transform hover:scale-[1.02]"
+              key={href}
+              href={href}
+              onClick={(e) => handleNavClick(e, href)}
+              className="text-sm font-medium uppercase tracking-widest text-[#171715] py-2 border-b border-[#D8D4CC]/40"
             >
-              Quiero empezar
+              {label}
             </a>
-          </div>
+          ))}
+          <a
+            href="#contacto"
+            onClick={(e) => handleNavClick(e, "#contacto")}
+            className="btn btn-solid justify-center mt-2 text-xs uppercase tracking-wider"
+          >
+            <span>Iniciar Proyecto</span>
+            <span>→</span>
+          </a>
         </div>
       </div>
     </header>
   );
 }
 
-/* ---------------- Reveal on scroll ---------------- */
+/* ---------------- Reveal on Scroll Helper ---------------- */
 function Reveal({
   children,
   delay = 0,
@@ -222,6 +292,7 @@ function Reveal({
 }) {
   const ref = useRef<HTMLDivElement | null>(null);
   const [shown, setShown] = useState(false);
+
   useEffect(() => {
     if (!ref.current) return;
     const io = new IntersectionObserver(
@@ -233,19 +304,20 @@ function Reveal({
           }
         });
       },
-      { threshold: 0.15, rootMargin: "0px 0px -60px 0px" },
+      { threshold: 0.1, rootMargin: "0px 0px -40px 0px" },
     );
     io.observe(ref.current);
     return () => io.disconnect();
   }, []);
+
   return (
     <Tag
       ref={ref}
       className={className}
       style={{
         opacity: shown ? 1 : 0,
-        transform: shown ? "translateY(0)" : "translateY(28px)",
-        transition: `opacity 0.9s cubic-bezier(0.22,1,0.36,1) ${delay}ms, transform 0.9s cubic-bezier(0.22,1,0.36,1) ${delay}ms`,
+        transform: shown ? "translateY(0)" : "translateY(24px)",
+        transition: `opacity 0.6s cubic-bezier(0.22,1,0.36,1) ${delay}ms, transform 0.6s cubic-bezier(0.22,1,0.36,1) ${delay}ms`,
       }}
     >
       {children}
@@ -253,851 +325,1126 @@ function Reveal({
   );
 }
 
-/* ---------------- Hero Carousel data ---------------- */
-const heroProjects = [
-  { title: "Save the Date Wedding Video", subtitle: "Cinematic Couple Session", id: "245861779", cat: "Video" },
-  { title: "Fashion Editorial Photography", subtitle: "Full Body Looks", id: "245823383", cat: "Fotografía" },
-  { title: "Behind the Scenes", subtitle: "Fashion Editorial en Locación", id: "245582333", cat: "Fotografía" },
-  { title: "Fashion Video", subtitle: "Look de Noche en Interior", id: "242964371", cat: "Video" },
-  { title: "Paco Yonque", subtitle: "Un viaje a través de su atmósfera", id: "232174275", cat: "Reels" },
-  { title: "Arte con sabor a identidad", subtitle: "Contenido Audiovisual", id: "232092363", cat: "Video" },
-];
-
-/* ---------------- Hero Carousel ---------------- */
-function HeroCarousel() {
-  const trackRef = useRef<HTMLDivElement | null>(null);
-  const [idx, setIdx] = useState(0);
-  const cardW = 380;
-  const gap = 20;
-
-  const scrollTo = useCallback(
-    (i: number) => {
-      if (!trackRef.current) return;
-      const target = i * (cardW + gap);
-      trackRef.current.scrollTo({ left: target, behavior: "smooth" });
-      setIdx(i);
-    },
-    [],
-  );
-
-  const prev = () => scrollTo(Math.max(0, idx - 1));
-  const next = () => scrollTo(Math.min(heroProjects.length - 1, idx + 1));
-
+/* ---------------- Títulos tipo portada editorial ----------------
+   Una línea pequeña en mayúsculas (antetítulo) y una sola palabra protagonista. */
+function CoverTitle({
+  kicker,
+  word,
+  end = ".",
+  size = "lg",
+  as: Tag = "h2",
+  dark = false,
+}: {
+  kicker: React.ReactNode;
+  word: string;
+  end?: string;
+  size?: "lg" | "md" | "sm";
+  as?: "h2" | "h3";
+  /* Sobre fondo negro */
+  dark?: boolean;
+}) {
   return (
-    <div className="mt-14 md:mt-20">
-      {/* Header + arrows */}
-      <div className="mx-auto flex max-w-[1400px] items-end justify-between px-6 md:px-10">
-        <div>
-          <span className="text-xs uppercase tracking-[0.3em] text-foreground/50">Proyectos destacados</span>
-        </div>
-        <div className="flex gap-2">
-          <button
-            onClick={prev}
-            aria-label="Anterior"
-            className="flex h-11 w-11 items-center justify-center rounded-full border border-foreground/20 text-foreground/60 transition-all hover:border-magenta hover:bg-magenta hover:text-white"
-          >
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <polyline points="15 18 9 12 15 6" />
-            </svg>
-          </button>
-          <button
-            onClick={next}
-            aria-label="Siguiente"
-            className="flex h-11 w-11 items-center justify-center rounded-full border border-foreground/20 text-foreground/60 transition-all hover:border-magenta hover:bg-magenta hover:text-white"
-          >
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <polyline points="9 18 15 12 9 6" />
-            </svg>
-          </button>
-        </div>
-      </div>
-
-      {/* Carousel track */}
-      <div
-        ref={trackRef}
-        className="carousel-track mt-6 flex gap-5 overflow-x-auto px-6 pb-6 md:px-10"
-        style={{ scrollSnapType: "x mandatory" }}
+    <Tag className={`ink-title ${dark ? "text-white" : "text-[#171715]"}`}>
+      <span
+        className={`block font-display leading-tight ${dark ? "text-white/50" : "text-[#77746E]"} ${
+          size === "lg" ? "cover-kicker-lg" : size === "md" ? "cover-kicker-md" : "cover-kicker-sm"
+        }`}
       >
-        {heroProjects.map((p, i) => (
-          <a
-            key={p.id}
-            href={`https://www.behance.net/gallery/${p.id}/project`}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="group relative flex w-[85vw] shrink-0 flex-col overflow-hidden border border-foreground/10 bg-white transition-shadow hover:shadow-xl sm:w-[380px]"
-            style={{ scrollSnapAlign: "start" }}
-          >
-            <div className="relative overflow-hidden" style={{ aspectRatio: "16/10" }}>
-              <iframe
-                src={`https://www.behance.net/embed/project/${p.id}?ilo0=1`}
-                className="pointer-events-none h-full w-full overflow-hidden"
-                style={{ overflow: "hidden" }}
-                scrolling="no"
-                allowFullScreen
-                loading="lazy"
-                frameBorder={0}
-                allow="clipboard-write"
-                referrerPolicy="strict-origin-when-cross-origin"
-                title={p.title}
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
-            </div>
-            <div className="flex items-center justify-between gap-4 border-t border-foreground/10 p-4">
-              <div>
-                <div className="font-display text-sm font-medium">{p.title}</div>
-                <div className="text-xs text-foreground/55">{p.subtitle}</div>
-              </div>
-              <span className="rounded-full bg-foreground/5 px-2.5 py-1 text-[10px] uppercase tracking-[0.2em] text-foreground/50">
-                {p.cat}
-              </span>
-            </div>
-          </a>
-        ))}
-        <div className="w-4 shrink-0" />
-      </div>
+        {kicker}
+      </span>
+      <span
+        className={`mt-1 block font-display ${
+          size === "lg" ? "cover-lg" : size === "md" ? "cover-md" : "cover-sm"
+        }`}
+      >
+        {word}
+        <span className={dark ? "text-[#C25A72]" : "text-[#6E1E2D]"}>{end}</span>
+      </span>
+    </Tag>
+  );
+}
 
-      {/* Progress dots */}
-      <div className="mx-auto flex max-w-[1400px] gap-1.5 px-6 md:px-10">
-        {heroProjects.map((_, i) => (
-          <button
-            key={i}
-            onClick={() => scrollTo(i)}
-            aria-label={`Slide ${i + 1}`}
-            className="h-1 rounded-full transition-all duration-300"
-            style={{
-              width: idx === i ? "32px" : "8px",
-              backgroundColor: idx === i ? "var(--magenta)" : "rgba(0,0,0,0.15)",
-            }}
-          />
-        ))}
+/* ---------------- Section Heading (mismo formato en toda la web) ---------------- */
+function SectionHeading({
+  kicker,
+  word,
+  end,
+  aside,
+  middle,
+  dark = false,
+}: {
+  kicker: React.ReactNode;
+  word: string;
+  end?: string;
+  dark?: boolean;
+  aside?: React.ReactNode;
+  /* Contenido entre el título y el texto lateral (p. ej. un carrusel) */
+  middle?: React.ReactNode;
+}) {
+  return (
+    <div data-reveal className="mb-6 flex items-end justify-between gap-6 md:mb-8">
+      <div className="shrink-0">
+        <CoverTitle kicker={kicker} word={word} end={end} dark={dark} />
       </div>
+      {middle}
+      {aside}
     </div>
   );
 }
 
-/* ---------------- Hero ---------------- */
+/* ---------------- Hero Section (Reference Layout: Minimalist + Moving Behance Rectangles) ---------------- */
+const heroBehanceReel = [
+  { title: "Save the Date", id: "245861779" },
+  { title: "Fashion Editorial", id: "245823383" },
+  { title: "Behind the Scenes", id: "245582333" },
+  { title: "Look de Noche", id: "242964371" },
+  { title: "Paco Yonque", id: "232174275" },
+  { title: "Arte con Identidad", id: "232092363" },
+  { title: "Retrato Editorial", id: "242393831" },
+  { title: "Look de Verano", id: "242394175" },
+  { title: "Cusco en Cada Detalle", id: "232173625" },
+];
+
 function Hero() {
-  const lines = ["Tu marca tiene algo que decir.", "Yo te ayudo", "a contarlo."];
+  const reelLoop = [...heroBehanceReel, ...heroBehanceReel];
+
   return (
-    <>
-      <section id="home" className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden pt-20 pb-8 md:pt-24 md:pb-10">
-        {/* Background Carousel */}
-        <div className="absolute inset-0 z-0 bg-black">
-          <img src="/portada.jpeg" alt="Ani Creative Studio Portada 1" className="carousel-img" />
-          <img src="/portada2.png" alt="Ani Creative Studio Portada 2" className="carousel-img" />
-          <img src="/portada3.png" alt="Ani Creative Studio Portada 3" className="carousel-img" />
-          {/* Dark Overlays for text contrast */}
-          <div className="absolute inset-0 bg-[#3D0E20]/35 mix-blend-multiply" />
-          <div
-            className="absolute inset-0"
-            style={{
-              background: "radial-gradient(circle at center, rgba(61, 14, 32, 0.15) 20%, rgba(61, 14, 32, 0.85) 100%)",
-            }}
-          />
-        </div>
+    <section
+      id="home"
+      className="relative min-h-[100svh] flex flex-col justify-between overflow-hidden bg-[#F8F7F4] pt-28 pb-6 md:min-h-screen md:pt-36 md:pb-14"
+    >
+      {/* Minimalist, airy typography block (top-left, plenty of negative space) */}
+      <div data-hero-content className="relative z-10 mx-auto w-full max-w-[1440px] px-6 md:px-12">
+        <div className="max-w-lg">
+          <span data-hero-fade className="eyebrow block text-[#77746E]">
+            Estudio creativo · Lima, Perú
+          </span>
 
-        <div className="relative z-10 mx-auto w-full max-w-[1400px] px-6 text-center md:px-10 flex flex-1 flex-col items-center justify-center">
-          <div className="flex flex-wrap items-center justify-center gap-2 text-[10px] uppercase tracking-[0.25em] text-white/95">
-
-            <span className="hidden h-px w-8 bg-white/50 md:block mt-2" />
-            <span className="text-white mt-2">Ani Creative Studio Agencia Creativa de Marketing</span>
-            <span className="rounded-full mt-2 border border-[#F4B3BD]/40 bg-[#8B1743] px-3 py-0.5 text-[9px] font-extrabold tracking-widest text-[#F4B3BD] shadow-lg">
-              BY ANA LUISA GONZÁLEZ HIDALGO
-            </span>
-            <span className="hidden h-px w-8 bg-white/50 md:block mt-2" />
-          </div>
-
-          <h1
-            className="mt-4 font-display font-extrabold text-white md:mt-5"
-            style={{
-              fontSize: "clamp(2.5rem, 5vw, 4.75rem)",
-              lineHeight: 0.95,
-              letterSpacing: "-0.02em",
-              textShadow: "0 4px 20px rgba(0,0,0,0.35)",
-            }}
-          >
-            {lines.map((line, i) => (
-              <span key={i} className="block overflow-hidden py-0.5">
-                <span
-                  className="block"
-                  style={{
-                    animation: `slide-up-in 0.8s cubic-bezier(0.22,1,0.36,1) ${0.1 + i * 0.1}s both`,
-                  }}
-                >
-                  {i === 2 ? (
-                    <>
-                      a <span className="text-[#F4B3BD]">contarlo.</span>
-                    </>
-                  ) : (
-                    line
-                  )}
-                </span>
+          <h1 className="mt-3 font-display text-5xl sm:text-7xl md:text-8xl tracking-tight text-[#171715] leading-[0.92]">
+            <span className="block overflow-hidden pb-[0.06em]">
+              <span data-hero-line className="block">
+                Anna González
               </span>
-            ))}
+            </span>
+            <span className="sr-only"> Agencia creativa de marketing y redes sociales en Lima</span>
           </h1>
 
-          <p className="mx-auto mt-4 max-w-xl text-xs leading-relaxed text-white/90 md:mt-5 md:text-sm" style={{ textShadow: "0 2px 8px rgba(0,0,0,0.35)" }}>
-            Estrategia, producción y contenido para marcas que quieren conectar y crecer en redes.
+          <p
+            data-hero-fade
+            className="mt-5 max-w-sm text-sm md:text-base text-[#77746E] font-light leading-relaxed"
+          >
+            Estrategia, contenido audiovisual y redes sociales para marcas que quieren verse bien{" "}
+            <span className="font-display text-[1.15em] text-[#6E1E2D]">y vender más.</span>
           </p>
 
-          <div className="mt-6 flex flex-wrap items-center justify-center gap-4">
+          <div data-hero-fade className="mt-7 flex items-center gap-6">
             <a
               href="#planes"
-              className="group animate-pulse-btn inline-flex items-center gap-2.5 rounded-full bg-white px-6 py-3 text-xs font-bold text-[#8B1743] shadow-xl transition-all hover:-translate-y-0.5"
+              className="link-u text-xs font-medium uppercase tracking-[0.18em] text-[#171715]"
             >
-              Ver servicios
-              <span className="inline-block h-1.5 w-1.5 rounded-full bg-[#8B1743] transition-transform group-hover:translate-x-1" />
+              <span>Ver planes</span>
+              <span>→</span>
             </a>
             <a
               href="#trabajos"
-              className="inline-flex items-center gap-1.5 rounded-full border border-white/30 bg-white/10 px-5 py-3 text-xs font-medium text-white backdrop-blur-md transition-colors hover:bg-white/20"
+              className="link-u text-xs uppercase tracking-[0.18em] text-[#77746E] hover:text-[#171715]"
             >
-              Ver proyectos
-              <span>→</span>
+              <span>Proyectos</span>
+              <span>↓</span>
             </a>
           </div>
+        </div>
+      </div>
 
-          {/* Small services cards grid at the bottom of the hero (more compact) */}
-          <div className="mt-10 grid w-full max-w-[900px] grid-cols-2 gap-3 sm:grid-cols-4 md:mt-12">
-            {[
-              [
-                "Gestión de RRSS",
-                "Calendario · publicación",
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z" /></svg>,
-              ],
-              [
-                "Reels",
-                "Producción · audiovisual",
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polygon points="23 7 16 12 23 17 23 7" /><rect width="15" height="14" x="1" y="5" rx="2" ry="2" /></svg>,
-              ],
-              [
-                "Diseño Gráfico",
-                "Identidad visual · piezas",
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><rect width="18" height="18" x="3" y="3" rx="2" /><path d="M3 9h18" /><path d="M9 21V9" /></svg>,
-              ],
-              [
-                "Campañas",
-                "Estrategia · reporting",
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10" /><circle cx="12" cy="12" r="6" /><circle cx="12" cy="12" r="2" /></svg>,
-              ],
-            ].map(([t, s, icon], i) => (
-              <div
-                key={t as string}
-                className="group flex flex-col items-center gap-2.5 rounded-2xl border border-white/20 bg-white/10 p-4 text-center shadow-md backdrop-blur-xl transition-all duration-400 hover:border-white/40 hover:bg-white/20 hover:-translate-y-0.5"
-                style={{ animation: `auto-hover-card 8s infinite ${i * 2}s` }}
+      {/* Moving horizontal strip of forced-rectangle Behance projects overlapping the vertical portrait */}
+      <div
+        data-hero-reel
+        className="relative z-10 mt-10 mb-2 flex min-h-[300px] w-full flex-1 overflow-hidden md:mt-20 md:mb-4 md:min-h-0 md:flex-none"
+      >
+        {/* En celular la tira crece hasta llenar el alto libre de la pantalla (sin hueco blanco) */}
+        <div data-hero-reel-wrap className="flex md:block">
+          <div className="hero-reel-track flex items-stretch gap-3 px-2 md:items-center md:gap-5">
+            {reelLoop.map((p, idx) => (
+              <a
+                key={`${p.id}-${idx}`}
+                href={`https://www.behance.net/gallery/${p.id}/project`}
+                target="_blank"
+                rel="noopener noreferrer"
+                title={p.title}
+                className="reel-card group relative block w-[68vw] sm:w-[300px] md:w-[340px] md:aspect-[16/10] shrink-0 overflow-hidden bg-[#EFEEE9] shadow-sm transition-transform duration-500 hover:scale-[1.02]"
               >
-                <div
-                  className="flex h-10 w-10 items-center justify-center rounded-full bg-[#E8C9D0] text-[#6F123B] shadow-inner"
-                  style={{ animation: `auto-hover-icon 8s infinite ${i * 2}s` }}
-                >
-                  {icon}
-                </div>
-                <div>
-                  <div className="font-display text-sm font-bold text-white tracking-wide">{t as string}</div>
-                  <div className="mt-0.5 text-[10px] font-medium tracking-wide text-white/70">{s as string}</div>
-                </div>
-              </div>
+                {/* Cropped Behance iframe forced into a clean 16:10 horizontal rectangle */}
+                <iframe
+                  src={`https://www.behance.net/embed/project/${p.id}?ilo0=1`}
+                  className="pointer-events-none absolute -top-[6%] left-0 h-[142%] w-full scale-[1.04] overflow-hidden border-0"
+                  scrolling="no"
+                  allowFullScreen
+                  loading="lazy"
+                  frameBorder={0}
+                  title={`${p.title}, Behance`}
+                />
+                <div className="pointer-events-none absolute inset-0 border border-[#171715]/10 transition-colors duration-300 group-hover:border-[#171715] group-hover:bg-[#171715]/10" />
+                <span className="pointer-events-none absolute bottom-2.5 right-2.5 flex items-center gap-1 bg-[#171715]/90 px-2.5 py-1 text-[10px] uppercase tracking-widest text-[#F8F7F4] opacity-0 transition-opacity duration-200 group-hover:opacity-100">
+                  <span>{p.title}</span>
+                  <ArrowUpRight size={11} />
+                </span>
+              </a>
             ))}
           </div>
         </div>
-      </section >
-
-      {/* Behance project carousel */}
-      < HeroCarousel />
-    </>
-  );
-}
-
-/* ---------------- Marquee ---------------- */
-function Marquee() {
-  const items = [
-    { label: "Estrategia", color: "text-[#8B1743]", icon: <Target className="h-6 w-6 text-[#8B1743]" /> },
-    { label: "Diseño", color: "text-[#D86B86]", icon: <Palette className="h-6 w-6 text-[#D86B86]" /> },
-    { label: "Reels", color: "text-[#6F123B]", icon: <Video className="h-6 w-6 text-[#6F123B]" /> },
-    { label: "Campañas", color: "text-[#B8325E]", icon: <Megaphone className="h-6 w-6 text-[#B8325E]" /> },
-    { label: "Identidad", color: "text-[#9E2A54]", icon: <Sparkles className="h-6 w-6 text-[#9E2A54]" /> },
-    { label: "Performance", color: "text-[#C44D72]", icon: <TrendingUp className="h-6 w-6 text-[#C44D72]" /> },
-  ];
-  const seq = [...items, ...items, ...items, ...items];
-  return (
-    <div className="border-y border-[#E8C9D0]/60 bg-[#FAF7F6] py-6 md:py-8">
-      <div className="overflow-hidden">
-        <div className="marquee-track flex items-center gap-12">
-          {seq.map((item, i) => (
-            <span key={i} className="flex items-center gap-10">
-              <span className="flex items-center gap-3.5">
-                <span className="flex h-11 w-11 items-center justify-center rounded-full bg-white shadow-sm border border-[#E8C9D0]/60">
-                  {item.icon}
-                </span>
-                <span
-                  className={`font-display font-extrabold ${item.color}`}
-                  style={{ fontSize: "clamp(2rem,5.5vw,4.25rem)", letterSpacing: "-0.03em" }}
-                >
-                  {item.label}
-                </span>
-              </span>
-              <span className="text-[#F4B3BD] text-xl">
-                ✦
-              </span>
-            </span>
-          ))}
-        </div>
       </div>
-    </div>
-  );
-}
-
-/* ---------------- Section header ---------------- */
-function SectionLabel({ num, label }: { num: string; label: string }) {
-  return (
-    <div className="mb-10 flex items-baseline gap-4 md:mb-16">
-      <span className="font-display font-medium text-xl text-magenta md:text-2xl">{num}</span>
-      <span className="text-xs uppercase tracking-[0.3em] text-foreground/60">{label}</span>
-      <span className="ml-2 h-px flex-1 bg-foreground/15" />
-    </div>
+    </section>
   );
 }
 
 /* ---------------- Services ---------------- */
-function Services() {
-  const items = [
-    {
-      t: "Estrategia de contenido",
-      d: "Investigación, calendario editorial, definición de pilares de comunicación y dirección creativa alineada con los objetivos de tu marca.",
-      bg: "bg-[#FDF0F3]",
-      text: "text-[#3D0E20]",
-      border: "border-[#E8C9D0]/50",
-      icon: <Target strokeWidth={1.5} className="h-10 w-10 md:h-12 md:w-12" />,
-      video: "/estrategia.mp4",
-    },
-    {
-      t: "Producción creativa",
-      d: "Grabación profesional, dirección creativa, edición de Reels, diseño gráfico, motion graphics y copywriting.",
-      bg: "bg-[#F4B3BD]",
-      text: "text-[#3D0E20]",
-      border: "border-[#D86B86]/40",
-      icon: <Palette strokeWidth={1.5} className="h-10 w-10 md:h-12 md:w-12" />,
-      video: "/produccion.mp4",
-    },
-    {
-      t: "Gestión y optimización",
-      d: "Programación, publicación, stories, análisis de métricas y optimización continua basada en resultados.",
-      bg: "bg-[#2D0A18]", // Deep burgundy
-      text: "text-white",
-      border: "border-white/10",
-      icon: <Smartphone strokeWidth={1.5} className="h-10 w-10 md:h-12 md:w-12" />,
-      video: "/reels.mp4",
-    },
-  ];
+/* ---------------- Sistema de cards (diseño de la sección Servicios) ----------------
+   Todas las cards de la web: esquinas muy redondeadas, fondo degradado en uno de
+   3 tonos de la paleta (vino, negro, rosado), etiqueta pequeña arriba, título serif
+   y acción al final. */
+type Tone = "wine" | "ink" | "blush" | "light" | "noir";
 
+const TONES: Record<
+  Tone,
+  {
+    bg: string;
+    text: string;
+    sub: string;
+    tag: string;
+    line: string;
+    inner: string;
+    accent: string;
+    btn: string;
+  }
+> = {
+  wine: {
+    bg: "bg-gradient-to-br from-[#8A2A40] via-[#6B1D2F] to-[#3A0F1A]",
+    text: "text-white",
+    sub: "text-white/75",
+    tag: "text-white/60",
+    line: "border-white/15",
+    inner: "bg-white/10",
+    accent: "text-[#F3C9D3]",
+    btn: "bg-white text-[#171715] hover:bg-[#F6E7EA]",
+  },
+  ink: {
+    bg: "bg-gradient-to-br from-[#2A2A2A] via-[#171715] to-[#000000]",
+    text: "text-white",
+    sub: "text-white/75",
+    tag: "text-white/60",
+    line: "border-white/15",
+    inner: "bg-white/10",
+    accent: "text-[#E7B9C4]",
+    btn: "bg-white text-[#171715] hover:bg-[#F6E7EA]",
+  },
+  blush: {
+    bg: "bg-gradient-to-br from-[#F6E7EA] via-[#EBCDD4] to-[#D9A8B3]",
+    text: "text-[#171715]",
+    sub: "text-[#171715]/70",
+    tag: "text-[#6B1D2F]",
+    line: "border-[#171715]/15",
+    inner: "bg-white/50",
+    accent: "text-[#6B1D2F]",
+    btn: "bg-[#171715] text-white hover:bg-[#6B1D2F]",
+  },
+  /* Degradado negro → vino */
+  noir: {
+    bg: "bg-gradient-to-br from-[#171715] via-[#2A1A1F] to-[#6B1D2F]",
+    text: "text-white",
+    sub: "text-white/70",
+    tag: "text-white/55",
+    line: "border-white/15",
+    inner: "bg-white/10",
+    accent: "text-[#E7B9C4]",
+    btn: "bg-white text-[#171715] hover:bg-[#F6E7EA]",
+  },
+  light: {
+    bg: "bg-white border border-[#171715]",
+    text: "text-[#171715]",
+    sub: "text-[#171715]/70",
+    tag: "text-[#77746E]",
+    line: "border-[#171715]/15",
+    inner: "bg-[#EFEEE9]",
+    accent: "text-[#171715]",
+    btn: "bg-[#171715] text-white hover:bg-[#6B1D2F]",
+  },
+};
+
+/* Orden en que se alternan los tonos dentro de una fila de cards */
+const TONE_CYCLE: Tone[] = ["wine", "ink", "blush"];
+const toneAt = (i: number, offset = 0) => TONE_CYCLE[(i + offset) % TONE_CYCLE.length];
+
+function Card({
+  tone,
+  className = "",
+  children,
+}: {
+  tone: Tone;
+  className?: string;
+  children: React.ReactNode;
+}) {
+  const t = TONES[tone];
   return (
-    <section className="py-24 md:py-36 overflow-hidden">
-      <div className="mx-auto max-w-[1400px] px-6 md:px-10">
-        <SectionLabel num="01" label="Servicios" />
-        <Reveal>
-          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
-            <h2
-              className="font-display font-medium max-w-3xl"
-              style={{ fontSize: "clamp(2rem, 5.5vw, 4.5rem)", letterSpacing: "-0.035em", lineHeight: 1 }}
-            >
-              Lo que hago: contenido con estrategia,
-              <br />
-              <em className="not-italic font-medium text-foreground/60">de principio a fin.</em>
-            </h2>
-          </div>
-        </Reveal>
-      </div>
-
-      <div className="mt-12 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 max-w-[1400px] mx-auto px-6 md:px-10 md:mt-20">
-        {items.map((it, i) => (
-          <ServiceCard key={i} it={it} index={i} />
-        ))}
-      </div>
-    </section>
+    <div data-reveal className={`rounded-[2rem] p-8 md:p-9 ${t.bg} ${t.text} ${className}`}>
+      {children}
+    </div>
   );
 }
 
-function ServiceCard({ it, index }: { it: any; index: number }) {
-  const ref = useRef<HTMLDivElement | null>(null);
-  const [shown, setShown] = useState(false);
+/* Etiqueta pequeña en mayúsculas (como el "01" de Servicios) */
+function CardTag({ tone, children }: { tone: Tone; children: React.ReactNode }) {
+  return (
+    <span className={`text-xs uppercase tracking-[0.2em] ${TONES[tone].tag}`}>{children}</span>
+  );
+}
 
-  useEffect(() => {
-    if (!ref.current) return;
-    const io = new IntersectionObserver(
-      ([e]) => {
-        if (e.isIntersecting) {
-          setShown(true);
-          io.disconnect();
-        }
-      },
-      { threshold: 0.1 }
-    );
-    io.observe(ref.current);
-    return () => io.disconnect();
-  }, []);
+/* Acción de texto al pie de la card (como "Cotizar →") */
+function CardLink({
+  href,
+  children,
+  external = false,
+}: {
+  href: string;
+  children: React.ReactNode;
+  external?: boolean;
+}) {
+  return (
+    <a
+      href={href}
+      {...(external ? { target: "_blank", rel: "noreferrer" } : {})}
+      className="inline-flex items-center gap-2 text-xs font-medium uppercase tracking-[0.18em] underline-offset-4 hover:underline"
+    >
+      {children}
+    </a>
+  );
+}
+
+/* Botón principal tipo píldora dentro de una card */
+function CardButton({
+  tone,
+  href,
+  children,
+  external = false,
+}: {
+  tone: Tone;
+  href: string;
+  children: React.ReactNode;
+  external?: boolean;
+}) {
+  return (
+    <a
+      href={href}
+      {...(external ? { target: "_blank", rel: "noreferrer" } : {})}
+      className={`group inline-flex w-full items-center justify-between rounded-full px-7 py-4 text-xs font-medium uppercase tracking-[0.18em] transition-[background-color,color,transform] duration-500 ease-[cubic-bezier(0.25,1,0.5,1)] hover:scale-[1.03] ${TONES[tone].btn}`}
+    >
+      {children}
+    </a>
+  );
+}
+
+/* Elemento de acordeón con el diseño de las cards: cabecera clicable (etiqueta,
+   título, extras y botón +) y panel que se despliega con una transición de altura.
+   Al pasar el cursor la card se eleva y un halo sigue al puntero. */
+function AccordionItem({
+  id,
+  tone,
+  tag,
+  title,
+  icon: Icon,
+  badge,
+  glow = false,
+  curtain = false,
+  dimmed = false,
+  open,
+  onToggle,
+  children,
+}: {
+  id: string;
+  tone: Tone;
+  tag: React.ReactNode;
+  title: React.ReactNode;
+  icon?: LucideIcon;
+  badge?: React.ReactNode;
+  /* Borde con iluminación en movimiento (plan recomendado) */
+  glow?: boolean;
+  /* Despliegue tipo cortina/folleto: desaceleración más larga y contenido que cae */
+  curtain?: boolean;
+  /* Atenuar (cuando otra card del grupo está abierta) */
+  dimmed?: boolean;
+  open: boolean;
+  onToggle: () => void;
+  children: React.ReactNode;
+}) {
+  const t = TONES[tone];
+  const panelId = `acc-panel-${id}`;
+  const btnId = `acc-btn-${id}`;
+  const onLight = tone === "blush" || tone === "light";
+  const ease = curtain
+    ? "duration-700 ease-[cubic-bezier(0.25,1,0.5,1)]"
+    : "duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]";
+  const hoverFill = onLight
+    ? "group-hover:border-[#171715] group-hover:bg-[#171715] group-hover:text-white"
+    : "group-hover:border-white group-hover:bg-white group-hover:text-[#171715]";
+
+  const trackPointer = (e: React.MouseEvent<HTMLDivElement>) => {
+    const r = e.currentTarget.getBoundingClientRect();
+    e.currentTarget.style.setProperty("--mx", `${e.clientX - r.left}px`);
+    e.currentTarget.style.setProperty("--my", `${e.clientY - r.top}px`);
+  };
 
   return (
-    <div
-      ref={ref}
-      className="w-full"
-      style={{
-        opacity: shown ? 1 : 0,
-        transform: shown ? "translateY(0)" : "translateY(40px)",
-        transition: `all 0.8s cubic-bezier(0.22,1,0.36,1) ${index * 120}ms`,
-      }}
-    >
+    <div data-reveal className={open ? "h-full" : "self-start"}>
       <div
-        className={`group relative flex min-h-[380px] md:min-h-[460px] w-full flex-col justify-between overflow-hidden rounded-[2.5rem] border ${it.border} ${it.bg} p-8 shadow-xl transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl md:p-12`}
+        onMouseMove={trackPointer}
+        className={`plan-lift h-full rounded-[2rem] ${glow ? "glow-border" : ""} ${
+          open ? "is-open" : ""
+        } ${dimmed ? "is-dimmed" : ""}`}
       >
-        {/* Video Background */}
-        <div className="absolute inset-0 z-0 overflow-hidden">
-          <video
-            src={it.video}
-            autoPlay
-            loop
-            muted
-            playsInline
-            className="h-full w-full object-cover mix-blend-overlay opacity-30 transition-transform duration-700 group-hover:scale-105 group-hover:opacity-50"
-          />
-        </div>
-
-        {/* Top part: Icon and Number */}
-        <div className="relative z-10 flex items-start justify-between">
-          <div className={`rounded-2xl bg-white/30 p-4 backdrop-blur-md transition-transform duration-500 group-hover:scale-110 group-hover:rotate-3 ${it.text}`}>
-            {it.icon}
-          </div>
-          <span className={`font-display font-medium text-2xl opacity-40 ${it.text}`}>
-            0{index + 1}
-          </span>
-        </div>
-
-        {/* Bottom part: Title and description */}
-        <div className="relative z-10 mt-auto">
-          <h3
-            className={`font-display font-medium leading-tight ${it.text} transition-transform duration-500 group-hover:-translate-y-1`}
-            style={{ fontSize: "clamp(2rem, 3.5vw, 3rem)", letterSpacing: "-0.02em" }}
+        <div
+          className={`spotlight relative h-full overflow-hidden ${
+            glow ? "rounded-[calc(2rem-2px)]" : "rounded-[2rem]"
+          } ${onLight ? "spot-dark" : "spot-light"} ${t.bg} ${t.text}`}
+        >
+          <h4>
+            <button
+              id={btnId}
+              type="button"
+              aria-expanded={open}
+              aria-controls={panelId}
+              onClick={onToggle}
+              className="group flex w-full items-center justify-between gap-6 px-7 py-6 text-left md:px-9 md:py-7"
+            >
+              <span className="min-w-0">
+                <span className="flex flex-wrap items-center gap-3">
+                  <CardTag tone={tone}>{tag}</CardTag>
+                  {badge}
+                </span>
+                <span className="mt-3 flex items-center gap-3 font-display text-3xl leading-tight transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:translate-x-1 md:text-4xl">
+                  {Icon && (
+                    <span
+                      aria-hidden
+                      className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-full border transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:rotate-[20deg] ${
+                        onLight ? "border-[#171715]/20" : "border-white/25"
+                      } ${t.accent}`}
+                    >
+                      <Icon size={18} strokeWidth={1.25} />
+                    </span>
+                  )}
+                  <span>{title}</span>
+                </span>
+              </span>
+              <span
+                aria-hidden
+                className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-full border transition-all ${ease} ${
+                  curtain && open
+                    ? "border-[#171715] bg-[#171715] text-white"
+                    : onLight
+                      ? "border-[#171715]/30"
+                      : "border-white/30"
+                } ${hoverFill} ${open ? "rotate-45" : ""}`}
+              >
+                <Plus size={20} strokeWidth={1.5} />
+              </span>
+            </button>
+          </h4>
+          <div
+            id={panelId}
+            role="region"
+            aria-labelledby={btnId}
+            className={`grid transition-[grid-template-rows] ${ease} ${
+              open ? "grid-rows-[1fr]" : "grid-rows-[0fr]"
+            }`}
           >
-            {it.t}
-          </h3>
-          <p className={`mt-6 text-sm leading-relaxed md:text-base ${it.text} opacity-80 transition-all duration-500 group-hover:opacity-100`}>
-            {it.d}
-          </p>
-
-          {/* Subtle animated underline */}
-          <div className="mt-8 h-px w-0 bg-current opacity-30 transition-all duration-700 ease-out group-hover:w-full" />
+            <div className="overflow-hidden">
+              <div
+                data-open={open}
+                className={`acc-body ${curtain ? "curtain" : ""} mx-7 border-t pb-8 pt-6 md:mx-9 ${t.line} transition-opacity duration-500 ${
+                  open ? "opacity-100" : "opacity-0"
+                }`}
+              >
+                {children}
+              </div>
+            </div>
+          </div>
         </div>
-
-        {/* Ambient glass reflection */}
-        <div className="pointer-events-none absolute inset-0 z-20 bg-gradient-to-br from-white/20 via-transparent to-black/5 mix-blend-overlay opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
       </div>
     </div>
   );
 }
 
-/* ---------------- Why me ---------------- */
-/* ---------------- Sobre mí / Por qué yo ---------------- */
-function AboutMe() {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const scrollWrapperRef = useRef<HTMLDivElement>(null);
+const waLink = (msg: string) => `https://wa.me/51994404466?text=${encodeURIComponent(msg)}`;
 
-  useGSAP(
-    () => {
-      const mm = gsap.matchMedia();
-
-      mm.add("(min-width: 1024px)", () => {
-        const sections = gsap.utils.toArray(".about-panel");
-
-        gsap.to(sections, {
-          xPercent: -100 * (sections.length - 1),
-          ease: "none",
-          scrollTrigger: {
-            trigger: containerRef.current,
-            pin: true,
-            scrub: 0.1,
-            end: () => "+=" + (scrollWrapperRef.current?.offsetWidth || 0),
-          },
-        });
-
-        // Background color animation
-        gsap.to(containerRef.current, {
-          backgroundColor: "#1A0510",
-          scrollTrigger: {
-            trigger: containerRef.current,
-            start: "top top",
-            end: "bottom bottom",
-            scrub: true,
-          },
-        });
-
-        // Parallax photo
-        gsap.to(".about-photo", {
-          scale: 1.15,
-          xPercent: 5,
-          stagger: 0.05,
-          scrollTrigger: {
-            trigger: containerRef.current,
-            start: "top bottom",
-            end: "bottom top",
-            scrub: true,
-          },
-        });
-      });
-    },
-    { scope: containerRef }
+/* Card de la sección de Servicios (pregunta + servicio + cotizar) */
+function ServiceCard({
+  it,
+  n,
+}: {
+  it: { q: string; t: string; d: string; tone: Tone; href: string };
+  n: number;
+}) {
+  return (
+    <Card
+      tone={it.tone}
+      className="flex h-full min-h-[230px] flex-col justify-between border border-white/10 p-6! md:p-7!"
+    >
+      <div>
+        <CardTag tone={it.tone}>0{n}</CardTag>
+        <h3 className="mt-3 font-display text-2xl leading-tight md:text-[1.75rem]">{it.q}</h3>
+      </div>
+      <div className="mt-6">
+        <p className="font-medium">{it.t}</p>
+        <p className={`mt-2 text-sm leading-relaxed ${TONES[it.tone].sub}`}>{it.d}</p>
+        <div className="mt-5">
+          <CardLink href={it.href}>Cotizar →</CardLink>
+        </div>
+      </div>
+    </Card>
   );
+}
+
+function Services() {
+  const items: { q: string; t: string; d: string; tone: Tone; href: string }[] = [
+    {
+      q: "¿No sabes qué publicar en redes?",
+      t: "Estrategia de contenido",
+      d: "Investigación, calendario editorial, pilares de comunicación y dirección creativa alineada con los objetivos de tu marca.",
+      tone: "noir",
+      href: "#onboarding",
+    },
+    {
+      q: "¿Tu contenido no se ve profesional?",
+      t: "Producción creativa",
+      d: "Grabación profesional, dirección creativa, edición de Reels, diseño gráfico, motion graphics y copywriting.",
+      tone: "noir",
+      href: "#planes-creacion",
+    },
+    {
+      q: "¿Publicas sin constancia ni resultados?",
+      t: "Gestión y optimización",
+      d: "Programación, publicación, stories, análisis de métricas y optimización continua basada en resultados.",
+      tone: "noir",
+      href: "#planes-gestion",
+    },
+  ];
+
+  /* Carrusel infinito: se duplican las cards para que el loop funcione aunque
+     se vean 3 a la vez en escritorio */
+  const slides = [...items, ...items];
+  const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true, align: "start" });
+  const [current, setCurrent] = useState(0);
+
+  useEffect(() => {
+    if (!emblaApi) return;
+    const onSelect = () => setCurrent(emblaApi.selectedScrollSnap() % items.length);
+    onSelect();
+    emblaApi.on("select", onSelect).on("reInit", onSelect);
+    return () => {
+      emblaApi.off("select", onSelect).off("reInit", onSelect);
+    };
+  }, [emblaApi, items.length]);
+
+  const prev = useCallback(() => emblaApi?.scrollPrev(), [emblaApi]);
+  const next = useCallback(() => emblaApi?.scrollNext(), [emblaApi]);
+
+  const arrowBtn =
+    "flex h-12 w-12 items-center justify-center rounded-full border border-white/40 text-white transition-colors hover:bg-white hover:text-[#171715]";
 
   return (
-    <section ref={containerRef} id="porque" className="bg-[#2D0A18] text-white relative min-h-screen flex flex-col justify-center py-16 lg:py-0 overflow-x-clip lg:overflow-hidden">
-      {/* Decorative lines & elements */}
-      <div className="absolute inset-0 pointer-events-none z-0 opacity-20">
-        <div className="absolute top-10 left-10 font-display text-[15vw] leading-none text-white/5 font-bold tracking-tighter whitespace-nowrap">
-          SOBRE MÍ
-        </div>
-      </div>
-
-      <div className="relative lg:absolute lg:top-20 lg:left-0 z-20 px-6 md:px-10 mb-8 lg:mb-0 pt-4 lg:pt-0">
-        <div className="flex items-baseline gap-4">
-          <span className="font-display font-medium text-xl text-[#F4B3BD] md:text-2xl">02</span>
-          <span className="text-xs uppercase tracking-[0.3em] text-white/50">Sobre mí</span>
-          <span className="ml-2 h-px w-32 bg-white/15" />
-        </div>
-      </div>
-
-      <div ref={scrollWrapperRef} className="flex flex-col lg:flex-row w-full lg:w-[400vw] h-auto lg:h-[100vh] items-center relative z-10 gap-16 lg:gap-0 pt-4 lg:pt-20 pb-12 lg:pb-0">
-
-        {/* Panel 1: Hero Intro & Photo */}
-        <div className="about-panel w-full lg:w-[100vw] h-auto lg:h-full flex flex-col lg:flex-row items-center px-6 md:px-20 gap-10">
-          <div className="flex-1 space-y-6 max-w-2xl relative z-10 lg:pl-10">
-            <h2 className="font-display font-medium text-4xl sm:text-5xl md:text-7xl leading-[0.95] tracking-tight text-white">
-              Valor real, <br />
-              <em className="text-[#F4B3BD] not-italic font-semibold">no solo</em> <br />
-              contenido.
-            </h2>
-            <p className="text-base sm:text-lg md:text-xl text-white/80 max-w-md leading-relaxed">
-              Soy Ana González. Construyo comunicación auténtica y alineada con los objetivos de tu marca.
+    <section
+      id="servicios"
+      data-nav-dark
+      className="flex items-center bg-[#0E0E0D] py-12 md:py-10 lg:min-h-[calc(100svh-72px)]"
+    >
+      <div className="mx-auto w-full max-w-[1440px] px-6 md:px-12">
+        <SectionHeading
+          kicker="¿Reconoces tu marca en estas"
+          word="Situaciones"
+          end="?"
+          dark
+          aside={
+            <p className="hidden max-w-xs shrink-0 text-base leading-relaxed text-white/60 md:block">
+              Diseñamos, producimos y gestionamos tu contenido para que destaque, conecte y
+              convierta.
             </p>
-          </div>
-          <div className="w-full shrink-0 h-[360px] sm:h-[460px] lg:h-[75vh] max-w-lg lg:max-w-none relative mx-auto my-6 lg:my-0 lg:flex-1">
-            <div className="absolute inset-0 z-0 flex items-center justify-center pointer-events-none">
-              <div className="w-[80%] h-[80%] bg-[#F4B3BD]/20 rounded-full blur-[70px]" />
-            </div>
-            {/* Collage - Photo 1 (Main) */}
-            <img src="/ana1.png" alt="Ana 1" className="about-photo absolute top-0 left-0 w-[55%] h-[60%] object-cover rounded-[1.8rem] sm:rounded-[2rem] shadow-2xl z-20 border border-white/10" />
-            {/* Collage - Photo 2 */}
-            <img src="/ana2.png" alt="Ana 2" className="about-photo absolute bottom-0 right-[2%] w-[48%] h-[55%] object-cover rounded-[1.8rem] sm:rounded-[2rem] shadow-2xl z-30 border border-white/10" />
-            {/* Collage - Photo 3 */}
-            {/* Collage - Photo 4 */}
-          </div>
+          }
+        />
+
+        {/* Escritorio: cards fijas */}
+        <div className="hidden grid-cols-3 gap-5 lg:grid">
+          {items.map((it, i) => (
+            <ServiceCard key={it.t} it={it} n={i + 1} />
+          ))}
         </div>
 
-        {/* Panel 2: Experiencia */}
-        <div className="about-panel w-full lg:w-[100vw] h-auto lg:h-full flex flex-col justify-center px-6 md:px-20 lg:px-32 relative py-4 lg:py-0">
-          <div className="max-w-4xl relative z-10">
-            <div className="text-[10vw] font-display font-bold leading-none text-white/5 absolute -top-16 -left-10 select-none pointer-events-none hidden lg:block">
-              EXPERIENCIA
-            </div>
-            <h3 className="font-display text-3xl sm:text-4xl md:text-6xl text-[#F4B3BD] font-semibold mb-6 lg:mb-8 relative z-10">
-              5+ Años de trayectoria
-            </h3>
-            <p className="text-base sm:text-xl md:text-3xl text-white/90 leading-relaxed relative z-10 max-w-3xl">
-              Especializada en sectores <strong className="text-[#FF8EAA]">beauty, moda, gastronomía e inmobiliario</strong>.
-              No soy una agencia tradicional; me integro como parte de tu equipo para lograr resultados reales.
-            </p>
-            <div className="mt-8 lg:mt-12 flex gap-8 sm:gap-12 border-t border-white/20 pt-8 relative z-10">
-              <div>
-                <div className="text-3xl sm:text-5xl font-display text-white font-bold">6+</div>
-                <div className="text-xs md:text-sm text-white/60 uppercase tracking-widest mt-2">Marcas gestionadas</div>
-              </div>
-              <div>
-                <div className="text-3xl sm:text-5xl font-display text-white font-bold">360°</div>
-                <div className="text-xs md:text-sm text-white/60 uppercase tracking-widest mt-2">Servicio Integral</div>
-              </div>
+        {/* Móvil y tablet: carrusel con flechas */}
+        <div className="lg:hidden">
+          <div className="overflow-hidden" ref={emblaRef}>
+            <div className="-ml-5 flex touch-pan-y">
+              {slides.map((it, i) => (
+                <div
+                  key={`${it.t}-${i}`}
+                  className="min-w-0 shrink-0 grow-0 basis-[88%] pl-5 sm:basis-1/2"
+                >
+                  <ServiceCard it={it} n={(i % items.length) + 1} />
+                </div>
+              ))}
             </div>
           </div>
-        </div>
 
-        {/* Panel 3: Formación & L'Oreal */}
-        <div className="about-panel w-full lg:w-[100vw] h-auto lg:h-full flex flex-col justify-center px-6 md:px-20 lg:px-32 py-4 lg:py-0">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-20 items-center">
-            <div>
-              <h3 className="font-display text-3xl sm:text-4xl md:text-6xl mb-6 text-white">Formación <br /><span className="text-[#FF8EAA] font-semibold">Especializada</span></h3>
-              <ul className="space-y-4 md:space-y-6 text-base md:text-2xl text-white/80">
-                <li className="flex items-start gap-4">
-                  <span className="w-2.5 h-2.5 mt-2.5 rounded-full bg-[#F4B3BD] shrink-0" />
-                  <span>Marketing Digital, Analytics y UX.</span>
-                </li>
-                <li className="flex items-start gap-4">
-                  <span className="w-2.5 h-2.5 mt-2.5 rounded-full bg-[#F4B3BD] shrink-0" />
-                  <span>Dirección Creativa y Storytelling Visual.</span>
-                </li>
-                <li className="flex items-start gap-4">
-                  <span className="w-2.5 h-2.5 mt-2.5 rounded-full bg-[#F4B3BD] shrink-0" />
-                  <span>Bachiller en Comunicaciones Audiovisuales.</span>
-                </li>
-              </ul>
+          {/* Controles: posición actual + flechas */}
+          <div className="mt-4 flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              {items.map((it, i) => (
+                <span
+                  key={it.t}
+                  className={`h-[2px] rounded-full transition-all duration-500 ${
+                    i === current ? "w-10 bg-[#C25A72]" : "w-5 bg-white/20"
+                  }`}
+                />
+              ))}
+              <span className="ml-2 text-xs tracking-[0.2em] text-white/50">
+                0{current + 1} / 0{items.length}
+              </span>
             </div>
-            <div className="relative group overflow-hidden rounded-[2rem] sm:rounded-[3rem] border border-white/20 shadow-2xl min-h-[300px] sm:min-h-[380px] md:min-h-[440px] flex flex-col justify-end">
-              <img src="/loreal.jpg" alt="L'Oreal" className="absolute inset-0 w-full h-full object-cover object-center opacity-85 group-hover:scale-105 transition-transform duration-700 z-0" />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/50 to-transparent z-10"></div>
-              <div className="relative z-20 p-6 md:p-12">
-                <span className="inline-block px-3 py-1 mb-3 rounded-full bg-white/25 backdrop-blur-md text-xs font-semibold text-white uppercase tracking-widest">
-                  Reconocimiento
-                </span>
-                <h4 className="text-2xl md:text-5xl font-display font-semibold leading-tight text-white">
-                  Finalista Nacional
-                  <span className="block text-[#FF8EAA] font-bold mt-1 text-xl md:text-4xl">L'Oréal Brandstorm 2026</span>
-                </h4>
-              </div>
+            <div className="flex gap-2">
+              <button type="button" onClick={prev} aria-label="Card anterior" className={arrowBtn}>
+                <ArrowLeft size={18} strokeWidth={1.5} />
+              </button>
+              <button type="button" onClick={next} aria-label="Card siguiente" className={arrowBtn}>
+                <ArrowRight size={18} strokeWidth={1.5} />
+              </button>
             </div>
           </div>
         </div>
 
-        {/* Panel 4: Filosofía */}
-        <div className="about-panel w-full lg:w-[100vw] h-auto lg:h-full flex flex-col justify-center px-6 md:px-20 lg:px-32 text-center items-center py-4 lg:py-0">
-          <div className="max-w-4xl relative">
-            <span className="absolute -top-12 -left-4 lg:-top-20 lg:-left-10 text-[4rem] lg:text-[8rem] text-[#F4B3BD]/30 font-serif leading-none">"</span>
-            <h2 className="font-display text-xl sm:text-3xl md:text-6xl leading-relaxed sm:leading-tight mb-6 lg:mb-10 text-white relative z-10">
-              Desarrollado por <em className="text-[#F4B3BD] not-italic font-semibold">una sola persona</em>: estrategia, diseño, edición y publicación <em className="text-[#FF8EAA] not-italic font-semibold">sin intermediarios</em>.
-            </h2>
-            <span className="absolute -bottom-8 -right-4 lg:-right-10 text-[4rem] lg:text-[8rem] text-[#F4B3BD]/30 font-serif leading-none rotate-180">"</span>
-          </div>
-        </div>
-
+        <p className="mt-5 text-center text-sm text-white/50">
+          Especialistas en {["Moda", "Beauty", "Editorial", "Producto"].join(" · ")}
+        </p>
       </div>
     </section>
   );
 }
 
+/* ---------------- Sobre mí ----------------
+   Pantalla completa: foto a la izquierda (sin bordes redondeados) y, a la derecha,
+   paneles de texto. En escritorio la sección queda fija y, con el scroll, el texto se
+   desplaza horizontalmente: filosofía → experiencia → KPIs (un panel por paso, con
+   snapping). En móvil todo se apila. */
+function AboutMe() {
+  const trackRef = useRef<HTMLDivElement | null>(null);
+  const rowRef = useRef<HTMLDivElement | null>(null);
+  const [panel, setPanel] = useState(0);
+  const panels = 3;
 
-/* ---------------- Onboarding ---------------- */
+  useEffect(() => {
+    const track = trackRef.current;
+    const row = rowRef.current;
+    if (!track || !row) return;
+    const mq = window.matchMedia("(min-width: 1024px)");
+    let raf = 0;
+    const update = () => {
+      raf = 0;
+      if (!mq.matches) {
+        row.style.transform = "";
+        setPanel(0);
+        return;
+      }
+      const r = track.getBoundingClientRect();
+      const span = r.height - window.innerHeight;
+      const p = span > 0 ? Math.max(0, Math.min(1, -r.top / span)) : 0;
+      row.style.transform = `translate3d(${-p * (panels - 1) * 100}%, 0, 0)`;
+      setPanel(Math.round(p * (panels - 1)));
+    };
+    const onScroll = () => {
+      if (!raf) raf = requestAnimationFrame(update);
+    };
+    update();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
+    mq.addEventListener("change", onScroll);
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+      mq.removeEventListener("change", onScroll);
+      if (raf) cancelAnimationFrame(raf);
+    };
+  }, []);
+
+  const label = "text-[10px] uppercase tracking-[0.25em] text-[#77746E]";
+
+  return (
+    <section id="porque" className="bg-white text-[#171715] lg:scroll-mt-0">
+      <div ref={trackRef} className="relative lg:h-[300vh]">
+        {/* Puntos de snapping: uno por panel (el primero lo da el inicio de la sección) */}
+        {Array.from({ length: panels - 1 }, (_, i) => (
+          <span
+            key={i}
+            aria-hidden
+            data-snap
+            className="pointer-events-none absolute left-0 hidden h-px w-px lg:block"
+            style={{ top: `${(i + 1) * 100}vh` }}
+          />
+        ))}
+
+        <div className="lg:sticky lg:top-0 lg:grid lg:h-screen lg:grid-cols-12 lg:overflow-hidden">
+          {/* Foto */}
+          <div className="flex items-center justify-center px-6 pt-24 md:px-12 lg:col-span-5 lg:h-full lg:px-12 lg:pb-12 lg:pt-28">
+            <div className="aspect-[856/1280] w-full max-w-sm overflow-hidden lg:h-full lg:w-auto lg:max-w-none">
+              <img
+                src="/about_me.jpeg"
+                alt="Ana González, directora creativa"
+                className="h-full w-full object-cover"
+              />
+            </div>
+          </div>
+
+          {/* Texto */}
+          <div className="relative flex flex-col px-6 py-14 md:px-12 lg:col-span-7 lg:h-full lg:px-12 lg:pb-12 lg:pt-28 xl:pr-24">
+            <span className={label}>Sobre mí</span>
+
+            <div className="mt-8 lg:flex-1 lg:overflow-hidden">
+              <div
+                ref={rowRef}
+                className="flex flex-col gap-16 will-change-transform lg:h-full lg:flex-row lg:gap-0"
+              >
+                {/* 1. Filosofía */}
+                <article className="lg:flex lg:h-full lg:w-full lg:shrink-0 lg:flex-col lg:justify-start lg:pr-10">
+                  <p className="cover-md font-display text-[#6E1E2D]">
+                    “Para vender, primero
+                    <br />
+                    hay que conectar.”
+                  </p>
+                  <p className="mt-8 max-w-xl text-base leading-relaxed text-[#171715]/70">
+                    No se trata solo de crear contenido bonito, sino de comunicar con intención y
+                    tener una estrategia detrás de cada publicación. Mi enfoque es crear contenido
+                    que conecte con tu audiencia, transmita la esencia de tu marca y te ayude a
+                    alcanzar resultados reales y medibles. Porque una buena estética atrae, pero una
+                    buena estrategia hace la diferencia.
+                  </p>
+                  <a
+                    href="#contacto"
+                    className="group mt-10 inline-flex w-fit items-center gap-3 rounded-full bg-[#171715] px-8 py-4 text-xs font-medium uppercase tracking-[0.18em] text-white transition-[background-color,transform] duration-500 ease-[cubic-bezier(0.25,1,0.5,1)] hover:scale-[1.03] hover:bg-[#6E1E2D]"
+                  >
+                    Conversemos
+                    <span
+                      aria-hidden
+                      className="transition-transform duration-500 group-hover:translate-x-1.5"
+                    >
+                      →
+                    </span>
+                  </a>
+                </article>
+
+                {/* 2. Experiencia */}
+                <article className="lg:flex lg:h-full lg:w-full lg:shrink-0 lg:flex-col lg:justify-start lg:pr-10">
+                  <h3 className="cover-md font-display">Hola, soy Ana</h3>
+                  <p className="mt-3 font-display text-2xl leading-tight text-[#6E1E2D] md:text-3xl">
+                    Freelancer, Content Manager y Directora Creativa
+                  </p>
+                  <p className="mt-6 max-w-xl text-base leading-relaxed text-[#171715]/70">
+                    Trabajo con marcas de{" "}
+                    <strong className="font-semibold text-[#171715]">moda y belleza</strong> que
+                    quieren dejar de publicar por publicar. Mi trabajo no empieza grabando un reel:
+                    empieza entendiendo tu negocio.
+                  </p>
+                  <span className={`${label} mt-10 block`}>Formación especializada</span>
+                  <ul className="mt-3 max-w-xl">
+                    {[
+                      "Marketing Digital, Analytics y UX.",
+                      "Dirección Creativa y Storytelling Visual.",
+                      "Bachiller en Comunicaciones Audiovisuales.",
+                    ].map((item) => (
+                      <li
+                        key={item}
+                        className="flex items-start gap-3 border-b border-[#171715]/10 py-3 text-[15px] text-[#171715]/80"
+                      >
+                        <Sparkle
+                          size={14}
+                          strokeWidth={1.75}
+                          className="mt-1 shrink-0 text-[#6E1E2D]"
+                        />
+                        <span>{item}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </article>
+
+                {/* 3. KPIs */}
+                <article className="lg:flex lg:h-full lg:w-full lg:shrink-0 lg:flex-col lg:justify-start lg:pr-10">
+                  <span className={label}>En números</span>
+                  <div className="mt-6 max-w-xl">
+                    {[
+                      ["6+", "Años de trayectoria"],
+                      ["10+", "Marcas gestionadas"],
+                      ["360°", "Servicio integral"],
+                    ].map(([n, l]) => (
+                      <div
+                        key={l}
+                        className="flex items-baseline justify-between gap-6 border-b border-[#171715]/10 py-5"
+                      >
+                        <span className="font-display text-6xl leading-none xl:text-7xl">{n}</span>
+                        <span className="text-right text-xs uppercase tracking-[0.2em] text-[#77746E]">
+                          {l}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                </article>
+              </div>
+            </div>
+
+            {/* Progreso (escritorio) */}
+            <div className="mt-8 hidden items-center justify-between lg:flex">
+              <div className="flex items-center gap-3">
+                {Array.from({ length: panels }, (_, i) => (
+                  <span
+                    key={i}
+                    className={`h-[2px] rounded-full transition-all duration-500 ${
+                      i === panel ? "w-10 bg-[#6E1E2D]" : "w-5 bg-[#171715]/15"
+                    }`}
+                  />
+                ))}
+                <span className="ml-2 text-xs tracking-[0.2em] text-[#77746E]">
+                  0{panel + 1} / 0{panels}
+                </span>
+              </div>
+              <span
+                className="flex items-center gap-2 text-xs uppercase tracking-[0.2em] text-[#77746E] transition-opacity duration-500"
+                style={{ opacity: panel < panels - 1 ? 1 : 0 }}
+              >
+                Sigue bajando <span className="scroll-hint inline-block">↓</span>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ---------------- Onboarding (Before Pricing) ---------------- */
 function Onboarding() {
   const steps = [
     {
-      t: "Descubrimiento",
       w: "Paso 1",
-      d: "Reunión para conocer la marca, objetivos, público y necesidades.",
+      t: "Descubrimiento",
+      d: "Reunión para conocer la marca, objetivos, público y necesidades específicas.",
     },
     {
-      t: "Auditoría y análisis",
       w: "Paso 2",
+      t: "Auditoría y análisis",
       d: "Revisión de redes sociales, contenido actual y referentes/competencia.",
     },
     {
-      t: "Estilo y comunicación",
       w: "Paso 3",
+      t: "Estilo y comunicación",
       d: "Definición de dirección visual, tono y líneas de comunicación.",
     },
     {
-      t: "Plan de contenido",
       w: "Paso 4",
+      t: "Plan de contenido",
       d: "Planificación del primer mes, pilares de contenido y calendario.",
     },
   ];
 
-  const styles = [
-    {
-      bg: "bg-gradient-to-br from-[#2D0A18] to-[#6F123B]",
-      text: "text-white",
-      sub: "text-white/70",
-      num: "text-white/10",
-      border: "border-[#8B1743]/50",
-      rot: "md:-rotate-2",
-    },
-    {
-      bg: "bg-gradient-to-br from-[#8B1743] to-[#C93B69]",
-      text: "text-white",
-      sub: "text-white/85",
-      num: "text-white/20",
-      border: "border-[#D86B86]/40",
-      rot: "md:rotate-2",
-    },
-    {
-      bg: "bg-gradient-to-br from-[#D86B86] to-[#F4B3BD]",
-      text: "text-[#3D0E20]",
-      sub: "text-[#3D0E20]/80",
-      num: "text-[#3D0E20]/15",
-      border: "border-white/40",
-      rot: "md:-rotate-1",
-    },
-    {
-      bg: "bg-gradient-to-br from-[#FDF0F3] to-[#FFFFFF]",
-      text: "text-[#6F123B]",
-      sub: "text-[#6F123B]/70",
-      num: "text-[#6F123B]/10",
-      border: "border-white shadow-xl",
-      rot: "md:rotate-3",
-    },
-  ];
+  /* Timeline con scroll.
+     Escritorio: la sección queda fija mientras se hace scroll; la línea horizontal se
+     llena y cada etapa se enciende en orden.
+     Móvil: línea vertical que se llena al ir bajando. */
+  const trackRef = useRef<HTMLDivElement | null>(null);
+  const lineRef = useRef<HTMLDivElement | null>(null);
+  const [reached, setReached] = useState(-1);
+
+  useEffect(() => {
+    const track = trackRef.current;
+    const line = lineRef.current;
+    if (!track || !line) return;
+    const mq = window.matchMedia("(min-width: 1024px)");
+    let raf = 0;
+    const update = () => {
+      raf = 0;
+      let p: number;
+      let last = -1;
+      if (mq.matches) {
+        const r = track.getBoundingClientRect();
+        const span = r.height - window.innerHeight;
+        p = span > 0 ? Math.max(0, Math.min(1, -r.top / span)) : 1;
+        steps.forEach((_, i) => {
+          if (p >= i / steps.length + 0.02) last = i;
+        });
+      } else {
+        const r = line.getBoundingClientRect();
+        const mid = window.innerHeight * 0.6;
+        p = Math.max(0, Math.min(1, (mid - r.top) / r.height));
+        line.querySelectorAll<HTMLElement>("[data-step]").forEach((row, i) => {
+          if (row.getBoundingClientRect().top + 24 < mid) last = i;
+        });
+      }
+      line.style.setProperty("--progress", String(p));
+      setReached(last);
+    };
+    const onScroll = () => {
+      if (!raf) raf = requestAnimationFrame(update);
+    };
+    update();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
+    mq.addEventListener("change", onScroll);
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+      mq.removeEventListener("change", onScroll);
+      if (raf) cancelAnimationFrame(raf);
+    };
+  }, [steps.length]);
 
   return (
-    <section className="overflow-hidden py-24 md:py-36">
-      <div className="mx-auto max-w-[1400px] px-6 md:px-10">
-        <SectionLabel num="03" label="Onboarding" />
-        <Reveal>
-          <h2
-            className="max-w-4xl font-display font-medium"
-            style={{ fontSize: "clamp(2rem,5vw,4rem)", letterSpacing: "-0.035em", lineHeight: 1 }}
-          >
-            Onboarding{" "}
-            <em className="not-italic font-medium text-magenta">Estratégico.</em>
-          </h2>
-          <p className="mt-6 max-w-2xl text-foreground/65 md:text-lg">
-            El Onboarding Estratégico permite construir una estrategia personalizada antes de iniciar la producción de contenido. Este proceso asegura que todo el material tenga coherencia con los objetivos de la marca.
-          </p>
-          <div className="mt-6 inline-flex items-center gap-3 rounded-2xl border border-magenta/30 bg-magenta/10 px-6 py-3">
-            <span className="font-display text-2xl font-bold text-magenta md:text-3xl" style={{ letterSpacing: "-0.03em" }}>S/ 350</span>
-            <span className="text-sm text-foreground/70">pago único</span>
-          </div>
-          <p className="mt-3 text-sm font-medium text-magenta/80 italic">Sin costo al contratar un plan mensual de 3 meses.</p>
-        </Reveal>
-
-        <div className="mt-16 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4 md:mt-24 lg:gap-5">
-          {steps.map((s, i) => {
-            const st = styles[i];
-            return (
-              <Reveal key={i} delay={i * 100}>
-                <div
-                  className={`group relative flex h-full min-h-[380px] flex-col justify-between overflow-hidden rounded-[2rem] border ${st.border} ${st.bg} p-8 shadow-lg transition-all duration-500 ease-out hover:-translate-y-4 hover:scale-[1.03] hover:shadow-2xl ${st.rot} hover:rotate-0`}
-                >
-                  {/* Binder holes styling element to look like a notebook page */}
-                  <div className="absolute left-6 top-6 flex flex-col gap-3 opacity-30 mix-blend-multiply">
-                    <div className="h-3 w-3 rounded-full bg-current shadow-inner" />
-                    <div className="h-3 w-3 rounded-full bg-current shadow-inner" />
-                  </div>
-
-                  <div className="relative z-10 mt-6">
-                    <span
-                      className={`inline-block rounded-full px-4 py-1.5 text-[10px] font-black uppercase tracking-widest ${st.bg} ${st.text} border ${st.border} shadow-sm mix-blend-luminosity`}
-                    >
-                      {s.w}
-                    </span>
-                    <h3 className={`mt-8 font-display text-2xl font-extrabold leading-tight tracking-tight ${st.text}`}>
-                      {s.t}
-                    </h3>
-                    <p className={`mt-4 text-sm leading-relaxed ${st.sub}`}>{s.d}</p>
-                  </div>
-
-                  {/* Big background number */}
-                  <div
-                    className={`absolute -bottom-6 -right-2 font-display text-[9rem] font-black leading-none ${st.num} transition-transform duration-700 ease-out group-hover:scale-110 group-hover:-translate-x-2 group-hover:-translate-y-2`}
-                  >
-                    {i + 1}
-                  </div>
-
-                  {/* Subtle glass reflection overlay */}
-                  <div className="pointer-events-none absolute inset-0 bg-gradient-to-tr from-white/0 via-white/10 to-white/0 opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
+    <section id="onboarding" data-nav-dark className="bg-[#0E0E0D] text-white">
+      <div ref={trackRef} className="relative lg:h-[220vh]">
+        <div className="mx-auto max-w-[1440px] px-6 py-12 md:px-12 md:py-16 lg:sticky lg:top-0 lg:flex lg:h-screen lg:flex-col lg:justify-center lg:pb-8 lg:pt-24">
+          {/* Título con la intro y el beneficio al costado (una sola fila) */}
+          <SectionHeading
+            kicker="Onboarding"
+            word="Estratégico"
+            dark
+            aside={
+              <div className="hidden max-w-xl shrink lg:block">
+                <p className="text-sm leading-relaxed text-white/60">
+                  El Onboarding Estratégico permite construir una estrategia personalizada antes de
+                  iniciar la producción de contenido. Este proceso asegura que todo el material
+                  tenga coherencia con los objetivos de la marca.
+                </p>
+                <div className="mt-4 inline-flex flex-wrap items-center gap-x-3 gap-y-1 rounded-2xl border border-white/10 bg-gradient-to-r from-[#171715] via-[#2A1A1F] to-[#6B1D2F] px-5 py-2.5">
+                  <span className="text-[10px] uppercase tracking-[0.2em] text-[#E7B9C4]">
+                    Beneficio especial
+                  </span>
+                  <span className="text-xs text-white/80">
+                    Sin costo adicional al contratar un plan mensual de 3 meses.
+                  </span>
                 </div>
-              </Reveal>
-            );
-          })}
+              </div>
+            }
+          />
+
+          {/* Móvil y tablet: intro y beneficio debajo del título */}
+          <div className="mb-10 lg:hidden">
+            <p className="max-w-2xl text-base leading-relaxed text-white/60">
+              El Onboarding Estratégico permite construir una estrategia personalizada antes de
+              iniciar la producción de contenido. Este proceso asegura que todo el material tenga
+              coherencia con los objetivos de la marca.
+            </p>
+            <Card tone="noir" className="mt-6 border border-white/10 p-6!">
+              <CardTag tone="noir">Beneficio especial</CardTag>
+              <p className={`mt-2 text-sm leading-relaxed ${TONES.noir.sub}`}>
+                Sin costo adicional al contratar un plan mensual de 3 meses.
+              </p>
+            </Card>
+          </div>
+
+          {/* Timeline: vertical en móvil, horizontal en escritorio */}
+          <div ref={lineRef} className="timeline relative">
+            <div
+              aria-hidden
+              className="absolute bottom-0 left-4 top-0 w-px bg-white/10 lg:bottom-auto lg:left-0 lg:right-0 lg:top-4 lg:h-px lg:w-auto"
+            >
+              <div className="timeline-fill absolute inset-0 bg-gradient-to-b from-[#C25A72] to-[#6B1D2F] lg:bg-gradient-to-r" />
+            </div>
+
+            <ol className="grid grid-cols-1 gap-10 lg:grid-cols-4 lg:gap-6">
+              {steps.map((s, i) => {
+                const on = i <= reached;
+                return (
+                  <li
+                    key={s.w}
+                    data-step
+                    className={`timeline-row relative pl-12 lg:pl-0 lg:pt-12 ${on ? "is-on" : ""}`}
+                  >
+                    {/* Punto sobre la línea */}
+                    <span
+                      aria-hidden
+                      className={`absolute left-4 top-6 z-10 flex h-8 w-8 -translate-x-1/2 items-center justify-center rounded-full border text-[10px] tabular-nums transition-all duration-700 lg:left-0 lg:top-0 lg:translate-x-0 ${
+                        on
+                          ? "border-[#C25A72] bg-[#6B1D2F] text-white shadow-[0_0_0_6px_rgba(194,90,114,0.15)]"
+                          : "border-white/20 bg-[#0E0E0D] text-white/40"
+                      }`}
+                    >
+                      0{i + 1}
+                    </span>
+
+                    <div className="timeline-card">
+                      <div
+                        className={`flex h-full flex-col rounded-[2rem] border p-6 transition-colors duration-700 lg:min-h-[210px] ${
+                          on
+                            ? "border-white/15 bg-gradient-to-br from-[#171715] via-[#2A1A1F] to-[#6B1D2F]"
+                            : "border-white/10 bg-white/[0.03]"
+                        }`}
+                      >
+                        <span className="text-xs uppercase tracking-[0.2em] text-white/50">
+                          0{i + 1} · {s.w}
+                        </span>
+                        <h3 className="mt-3 font-display text-2xl leading-tight xl:text-3xl">
+                          {s.t}
+                        </h3>
+                        <p className="mt-3 text-sm leading-relaxed text-white/65">{s.d}</p>
+                        <p className="mt-auto pt-5 text-[10px] uppercase tracking-[0.2em] text-[#E7B9C4]/70">
+                          Fase metodológica
+                        </p>
+                      </div>
+                    </div>
+                  </li>
+                );
+              })}
+            </ol>
+          </div>
         </div>
       </div>
     </section>
   );
 }
 
-/* ---------------- Portfolio ---------------- */
+/* ---------------- Portfolio / Panel editorial de proyectos ---------------- */
 const projects = [
-  ["Save the Date Wedding Video", "Cinematic Couple Session", "245861779"],
-  ["Fashion Editorial Photography", "Full Body Looks", "245823383"],
-  ["Behind the Scenes", "Fashion Editorial en Locación", "245582333"],
-  ["Fashion Video", "Look de Noche en Interior", "242964371"],
-  ["Fashion Video", "Look de Verano en Locación", "242394175"],
-  ["Retrato Editorial", "Detalles y Accesorios", "242393831"],
-  ["Paco Yonque", "Un viaje a través de su atmósfera", "232174275"],
-  ["Atmospheric Video", "Preparación en Cocina Paco Yonque", "245823969"],
-  ["Arte con sabor a identidad", "Contenido Audiovisual", "232092363"],
-  ["El horno de Paco", "Contenido Audiovisual", "232086303"],
-  ["Cusco en cada detalle", "Travel & Culture", "232173625"],
-  ["Activación Estruendomudo", "Edición de video", "232172095"],
-  ["Sytyk", "Prototipo App + Web", "161085283"],
-  ["Portafolio 2024", "Ana González", "177552055"],
-  ["La Brisa También Tiene Colores", "Cortometraje", "161091699"],
-  ["Beso de Tres", "Video Musical", "161094325"],
-  ["Voz Humana", "Cortometraje", "161092109"],
-] as const;
+  // Moda / sesiones con modelos (protagonistas del panel)
+  { t: "Fashion Editorial", k: "Moda · Color · Actitud", id: "245823383" },
+  { t: "Look de Noche", k: "Noche · Elegancia · Movimiento", id: "242964371" },
+  { t: "Behind the Scenes", k: "Proceso · Locación · Equipo", id: "245582333" },
+  { t: "Retrato Editorial", k: "Detalle · Joyería · Mirada", id: "242393831" },
+  { t: "Look de Verano", k: "Verano · Luz · Libertad", id: "242394175" },
+  // Save the Date
+  { t: "Save the Date", k: "Amor · Cine · Promesa", id: "245861779" },
+  // Gastronomía
+  { t: "Paco Yonque", k: "Atmósfera · Sabor · Memoria", id: "232174275" },
+  { t: "En la Cocina", k: "Fuego · Oficio · Ritual", id: "245823969" },
+  { t: "El Horno de Paco", k: "Tradición · Calor · Origen", id: "232086303" },
+];
 
-function ProjectCard({
-  title,
-  subtitle,
-  id,
-  span = "",
+/* Mosaico superior (moda): 4 columnas x 2 filas en escritorio */
+const tileSpans = [
+  "col-span-2 row-span-2", // Fashion Editorial (destacado)
+  "row-span-2", // Look de Noche
+  "", // Behind the Scenes
+  "", // Retrato Editorial
+];
+
+/* Texto que aparece letra por letra al pasar el cursor */
+function Lettering({
+  text,
+  delay = 0,
+  className = "",
 }: {
-  title: string;
-  subtitle: string;
-  id: string;
-  span?: string;
+  text: string;
+  delay?: number;
+  className?: string;
+}) {
+  let n = 0;
+  return (
+    <span className={className} aria-label={text}>
+      {text.split(" ").map((word, w) => (
+        <span key={w} aria-hidden className="inline-block whitespace-nowrap">
+          {[...word].map((ch, c) => (
+            <span
+              key={c}
+              className="letter"
+              style={{ "--d": `${delay + n++ * 22}ms` } as React.CSSProperties}
+            >
+              {ch}
+            </span>
+          ))}
+          {" "}
+        </span>
+      ))}
+    </span>
+  );
+}
+
+/* Un proyecto del panel: portada + texto con lettering en hover */
+function ProjectTile({
+  p,
+  index,
+  className = "",
+}: {
+  p: (typeof projects)[number];
+  index: number;
+  className?: string;
 }) {
   return (
-    <Reveal className={`group relative overflow-hidden rounded-3xl border border-foreground/10 bg-white ${span}`}>
-      <a
-        href={`https://www.behance.net/gallery/${id}/project`}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="block h-full w-full"
-      >
-        <div className="relative overflow-hidden">
-          <div
-            className="transition-transform duration-[800ms] ease-out group-hover:scale-105"
-            style={{ aspectRatio: "404/316" }}
-          >
-            <iframe
-              src={`https://www.behance.net/embed/project/${id}?ilo0=1`}
-              className="pointer-events-none h-full w-full overflow-hidden"
-              style={{ overflow: "hidden" }}
-              scrolling="no"
-              allowFullScreen
-              loading="lazy"
-              frameBorder={0}
-              allow="clipboard-write"
-              referrerPolicy="strict-origin-when-cross-origin"
-              title={title}
-            />
-          </div>
-        </div>
-        <div className="flex items-start justify-between gap-4 border-t border-foreground/10 p-5">
-          <div>
-            <div className="font-display text-sm font-medium leading-tight group-hover:text-magenta transition-colors">{title}</div>
-            <div className="mt-1 text-xs text-foreground/55">{subtitle}</div>
-          </div>
-          <span className="mt-1 inline-block h-1.5 w-1.5 shrink-0 rounded-full bg-magenta transition-transform group-hover:scale-150" />
-        </div>
-      </a>
-    </Reveal>
+    <a
+      href={`https://www.behance.net/gallery/${p.id}/project`}
+      target="_blank"
+      rel="noopener noreferrer"
+      className={`tile group relative block overflow-hidden bg-[#171715] ${className}`}
+    >
+      {/* Embed recortado para mostrar solo la portada, cubriendo el tile */}
+      <iframe
+        src={`https://www.behance.net/embed/project/${p.id}?ilo0=1`}
+        className="tile-media pointer-events-none absolute border-0"
+        scrolling="no"
+        loading="lazy"
+        frameBorder={0}
+        title={p.t}
+      />
+
+      <div className="tile-veil pointer-events-none absolute inset-0 bg-gradient-to-t from-[#171715]/85 via-[#171715]/25 to-transparent" />
+
+      <span className="pointer-events-none absolute left-4 top-4 text-[10px] tracking-[0.2em] text-white/80 md:left-5 md:top-5">
+        <Lettering text={String(index + 1).padStart(2, "0")} />
+      </span>
+
+      <div className="pointer-events-none absolute inset-x-4 bottom-4 md:inset-x-5 md:bottom-5">
+        <Lettering
+          text={p.k}
+          className="block text-[10px] uppercase tracking-[0.2em] text-white/75"
+        />
+        <Lettering
+          text={p.t}
+          delay={180}
+          className="mt-2 block font-display text-xl leading-tight text-white md:text-3xl"
+        />
+      </div>
+    </a>
   );
 }
 
 function Portfolio() {
-  // Bento spans (12-col grid on desktop)
-  const spans = [
-    "md:col-span-7", "md:col-span-5",
-    "md:col-span-4", "md:col-span-4", "md:col-span-4",
-    "md:col-span-6", "md:col-span-6",
-    "md:col-span-5", "md:col-span-7",
-    "md:col-span-4", "md:col-span-4", "md:col-span-4",
-    "md:col-span-6", "md:col-span-6",
-    "md:col-span-4", "md:col-span-4", "md:col-span-4",
-  ];
-  return (
-    <section id="trabajos" className="py-24 md:py-36">
-      <div className="mx-auto max-w-[1400px] px-6 md:px-10">
-        <SectionLabel num="04" label="Trabajos" />
-        <Reveal>
-          <h2
-            className="font-display font-medium"
-            style={{ fontSize: "clamp(2rem,5.5vw,4.5rem)", letterSpacing: "-0.035em", lineHeight: 1 }}
-          >
-            Reels, identidad e{" "}
-            <em className="not-italic font-medium text-foreground/55">
-              historias de marca
-            </em>
-            .
-          </h2>
-        </Reveal>
+  /* Moda en mosaico; Look de Verano + Save the Date y gastronomía en filas con la
+     proporción de la portada de Behance (404/316) para que se vean completas */
+  const mosaic = projects.slice(0, 4);
+  const featured = projects.slice(4, 6);
+  const food = projects.slice(6);
 
-        <div className="mt-16 grid grid-cols-1 gap-4 md:grid-cols-12 md:gap-5">
-          {projects.map(([t, s, id], i) => (
-            <ProjectCard key={id} title={t} subtitle={s} id={id} span={spans[i]} />
+  return (
+    <section id="trabajos" className="bg-[#F8F7F4] py-12 md:py-16">
+      <div className="mx-auto max-w-[1440px] px-6 md:px-12">
+        <SectionHeading
+          kicker="Proyectos con"
+          word="Historia"
+          aside={
+            <a
+              href="https://www.behance.net/anagonzlez8/projects"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="link-u hidden shrink-0 text-xs uppercase tracking-[0.18em] text-[#171715] sm:inline-flex"
+            >
+              Ver todo en Behance ↗
+            </a>
+          }
+        />
+
+        <div className="grid grid-cols-2 auto-rows-[120px] gap-2 sm:auto-rows-[150px] md:grid-cols-4 md:gap-3 lg:auto-rows-[180px]">
+          {mosaic.map((p, i) => (
+            <ProjectTile key={p.id} p={p} index={i} className={tileSpans[i]} />
+          ))}
+        </div>
+
+        <div className="mt-2 grid grid-cols-1 gap-2 sm:grid-cols-2 md:mt-3 md:gap-3">
+          {featured.map((p, i) => (
+            <ProjectTile key={p.id} p={p} index={i + 4} className="aspect-[404/316]" />
+          ))}
+        </div>
+
+        <div className="mt-2 grid grid-cols-1 gap-2 sm:grid-cols-3 md:mt-3 md:gap-3">
+          {food.map((p, i) => (
+            <ProjectTile key={p.id} p={p} index={i + 6} className="aspect-[404/316]" />
           ))}
         </div>
       </div>
@@ -1105,148 +1452,463 @@ function Portfolio() {
   );
 }
 
-/* ---------------- Reviews ---------------- */
-const reviewsData = [
+/* ---------------- Pricing Section (All monetary prices completely removed) ---------------- */
+/* ---------------- Collage editorial (Planes de Gestión) ----------------
+   Fotos dispersas tipo maquetación de revista con paralaje sutil: cada pieza se
+   mueve a distinta velocidad con el scroll y el cursor (rango aprox. -10px a 15px). */
+const collagePieces: {
+  src: string;
+  alt: string;
+  depth: number;
+  className: string;
+}[] = [
   {
-    q: "Buscábamos a alguien que entendiera el lenguaje inmobiliario y lo tradujera a digital. Ana lo logró. Las campañas que gestionó superaron nuestras expectativas de CPL.",
-    a: "Equipo Comercial",
-    b: "Century 21 Principal",
-    logo: "/century21.png",
-    avatar: "https://ui-avatars.com/api/?name=EC&background=D86B86&color=fff",
+    src: "/planes2/gc1.jpeg",
+    alt: "",
+    depth: 15,
+    className: "left-0 top-0 w-[30%] h-[88%]",
   },
   {
-    q: "Ana entiende el mundo del retail y la moda. Nos ayudó a posicionar Ibyza con una identidad visual muy propia que ahora nuestros seguidores reconocen al instante.",
-    a: "Fundadora",
-    b: "Ibyza Shop",
-    logo: "/ibyza.png",
-    avatar: "https://ui-avatars.com/api/?name=FU&background=2D0A18&color=fff",
+    src: "/planes2/gc2.jpeg",
+    alt: "",
+    depth: -10,
+    className: "left-[32%] top-[16%] w-[15%] h-[84%]",
   },
   {
-    q: "Lo que más valoro es que entiende la estética de la marca desde el primer momento. No hay que explicar mucho; capta el espíritu de Isidra y lo traduce en contenido que enamora.",
-    a: "Sofía R.",
-    b: "Isidra Concept Store",
-    logo: "/isidra.png",
-    avatar: "https://ui-avatars.com/api/?name=SR&background=D86B86&color=fff",
+    src: "/planes2/gc3.jpeg",
+    alt: "",
+    depth: 8,
+    className: "left-[49%] top-0 w-[19%] h-[72%]",
   },
   {
-    q: "Ana transformó completamente nuestra presencia en Instagram. Antes publicábamos sin estrategia. Ahora tenemos una grilla coherente y las ventas en tienda aumentaron notablemente.",
-    a: "Valeria M.",
-    b: "Menesses Calzado",
-    logo: "/menesses.png",
-    avatar: "https://ui-avatars.com/api/?name=VM&background=2D0A18&color=fff",
+    src: "/planes2/gc4.jpeg",
+    alt: "",
+    depth: -6,
+    className: "left-[70%] top-[22%] w-[16%] h-[78%]",
   },
   {
-    q: "Trabajar con Ana fue una de las mejores decisiones del año. Sus reels generaron el triple de engagement que cualquier publicación anterior. Visión audiovisual impecable.",
-    a: "Chef Rafael P.",
-    b: "Restaurante Paco Yonque",
-    logo: "/pacoyonque.png",
-    avatar: "https://ui-avatars.com/api/?name=CR&background=D86B86&color=fff",
+    src: "/planes2/gc5.jpeg",
+    alt: "",
+    depth: 12,
+    className: "right-0 top-[4%] w-[12%] h-[58%]",
   },
 ];
 
-function Reviews() {
-  const [current, setCurrent] = useState(0);
-  const r = reviewsData[current];
+function EditorialCollage({ className = "" }: { className?: string }) {
+  const ref = useRef<HTMLDivElement | null>(null);
 
-  const next = () => setCurrent((c) => (c + 1) % reviewsData.length);
-  const prev = () => setCurrent((c) => (c - 1 + reviewsData.length) % reviewsData.length);
+  useEffect(() => {
+    const root = ref.current;
+    if (!root || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const items = Array.from(root.querySelectorAll<HTMLElement>("[data-depth]"));
+    let mx = 0;
+    let my = 0;
+    let raf = 0;
+
+    const render = () => {
+      raf = 0;
+      const r = root.getBoundingClientRect();
+      /* -1 (entrando por abajo) → 1 (saliendo por arriba) */
+      const p = Math.max(
+        -1,
+        Math.min(1, (window.innerHeight / 2 - (r.top + r.height / 2)) / window.innerHeight),
+      );
+      items.forEach((el) => {
+        const d = Number(el.dataset.depth);
+        el.style.transform = `translate3d(${mx * d * 0.6}px, ${p * d + my * d * 0.6}px, 0)`;
+      });
+    };
+    const schedule = () => {
+      if (!raf) raf = requestAnimationFrame(render);
+    };
+    const onMove = (e: MouseEvent) => {
+      mx = e.clientX / window.innerWidth - 0.5;
+      my = e.clientY / window.innerHeight - 0.5;
+      schedule();
+    };
+
+    render();
+    window.addEventListener("scroll", schedule, { passive: true });
+    window.addEventListener("mousemove", onMove, { passive: true });
+    return () => {
+      window.removeEventListener("scroll", schedule);
+      window.removeEventListener("mousemove", onMove);
+      if (raf) cancelAnimationFrame(raf);
+    };
+  }, []);
 
   return (
-    <section id="reviews" className="bg-ink py-24 text-ink-foreground md:py-36 relative overflow-hidden">
-      {/* Animated Background Bubbles - Increased opacity and visibility */}
-      <div className="absolute inset-0 pointer-events-none z-0">
-        <div className="absolute -top-32 -left-32 h-[500px] w-[500px] rounded-full bg-gradient-to-br from-[#FF8EAA] to-magenta opacity-50 blur-[100px] animate-pulse" style={{ animationDuration: '8s' }} />
-        <div className="absolute -bottom-40 -right-32 h-[600px] w-[600px] rounded-full bg-gradient-to-tl from-white to-[#D86B86] opacity-30 blur-[120px] animate-pulse" style={{ animationDuration: '12s' }} />
+    <div ref={ref} aria-hidden className={`relative h-[210px] ${className}`}>
+      <div data-reveal className="absolute inset-0">
+        {collagePieces.map((pc) => (
+          <figure
+            key={pc.src}
+            data-depth={pc.depth}
+            className={`collage-piece absolute overflow-hidden rounded-[0.35rem] shadow-[0_18px_40px_-24px_rgba(23,23,21,0.45)] ${pc.className}`}
+          >
+            <img src={pc.src} alt={pc.alt} loading="lazy" className="h-full w-full object-cover" />
+          </figure>
+        ))}
       </div>
-
-      <div className="mx-auto max-w-[1400px] px-6 md:px-10 relative z-10">
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-12 md:gap-8 items-center">
-          {/* Left Column */}
-          <div className="md:col-span-5 flex flex-col items-start justify-center py-4">
-            <div className="mb-8 flex items-baseline gap-4 w-full max-w-[300px]">
-              <span className="font-display font-medium text-xl text-white md:text-2xl">05</span>
-              <span className="text-xs uppercase tracking-[0.3em] text-white/50">Testimonios</span>
-              <span className="ml-2 h-px flex-1 bg-white/15" />
-            </div>
-            <Reveal>
-              <h2
-                className="font-display font-medium leading-[1.15]"
-                style={{ fontSize: "clamp(2.5rem, 4vw, 4.5rem)", letterSpacing: "-0.03em" }}
-              >
-                Lo que dicen las marcas con las que{" "}
-                <em className="not-italic text-[#FF8EAA] whitespace-nowrap">trabajo.</em>
-              </h2>
-            </Reveal>
-          </div>
-
-          {/* Right Column */}
-          <div className="md:col-span-7 flex flex-col justify-between md:pl-10">
-            <div key={current} className="animate-in fade-in slide-in-from-right-8 duration-700 min-h-[260px] md:min-h-[220px]">
-              <p className="font-display font-medium text-2xl md:text-[2rem] leading-snug text-white/90">
-                “{r.q}”
-              </p>
-
-              <div className="mt-12 flex items-center justify-between">
-                <div className="flex items-center gap-4">
-                  <img src={r.avatar} alt={r.a} className="h-14 w-14 rounded-full object-cover border border-white/20" />
-                  <div>
-                    <h4 className="font-display font-medium text-lg text-white">{r.a}</h4>
-                    <p className="text-sm text-white/50">{r.b}</p>
-                  </div>
-                </div>
-                <img src={r.logo} alt={r.b} className="h-8 md:h-12 w-auto max-w-[120px] object-contain" />
-              </div>
-            </div>
-
-            {/* Navigation */}
-            <div className="mt-16 flex flex-col-reverse md:flex-row items-center justify-between border-t border-white/10 pt-8 gap-6">
-              {/* Dots */}
-              <div className="flex gap-2 w-full md:w-auto justify-center md:justify-start">
-                {reviewsData.map((_, i) => (
-                  <button
-                    key={i}
-                    onClick={() => setCurrent(i)}
-                    aria-label={`Go to slide ${i + 1}`}
-                    className={`h-1.5 rounded-full transition-all duration-500 ${i === current ? "w-8 bg-magenta" : "w-4 bg-white/20 hover:bg-white/40"
-                      }`}
-                  />
-                ))}
-              </div>
-
-              {/* Arrows */}
-              <div className="flex gap-3 w-full md:w-auto justify-center md:justify-end">
-                <button
-                  onClick={prev}
-                  aria-label="Previous slide"
-                  className="flex h-12 w-12 items-center justify-center rounded-full border border-white/20 text-white transition-all hover:bg-white hover:text-ink"
-                >
-                  <ArrowLeft strokeWidth={1.5} className="h-5 w-5" />
-                </button>
-                <button
-                  onClick={next}
-                  aria-label="Next slide"
-                  className="flex h-12 w-12 items-center justify-center rounded-full border border-white/20 text-white transition-all hover:bg-white hover:text-ink"
-                >
-                  <ArrowRight strokeWidth={1.5} className="h-5 w-5" />
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
+    </div>
   );
 }
 
-/* ---------------- Pricing ---------------- */
+/* Subtítulo de cada grupo de planes (fuera de Pricing para que no se vuelva a montar en cada render) */
+function GroupHeader({
+  id,
+  n,
+  kicker,
+  word,
+  chip,
+  desc,
+}: {
+  id?: string;
+  n: string;
+  kicker: string;
+  word: string;
+  chip?: string;
+  desc: string;
+}) {
+  return (
+    <div
+      data-reveal
+      id={id}
+      className={`mb-6 flex scroll-mt-28 flex-wrap items-end justify-between gap-x-10 gap-y-3 md:mb-8 ${
+        n === "1" ? "mt-0" : "mt-12 md:mt-16"
+      }`}
+    >
+      <div className="flex flex-wrap items-end gap-x-4 gap-y-3">
+        <CoverTitle
+          as="h3"
+          size="md"
+          kicker={
+            <>
+              <span className="mr-2 text-[#6E1E2D]">0{n}</span>
+              {kicker}
+            </>
+          }
+          word={word}
+        />
+        {chip && (
+          <span className="mb-2 rounded-full bg-[#171715] px-3 py-1 text-[10px] uppercase tracking-[0.2em] text-white">
+            {chip}
+          </span>
+        )}
+      </div>
+      <p className="max-w-md pb-1 text-sm leading-relaxed text-[#77746E]">{desc}</p>
+    </div>
+  );
+}
+
+/* ---------------- Servicios complementarios en un solo bloque ----------------
+   Barra lateral con los módulos y, a la derecha, todo el módulo activo de un vistazo:
+   planes en formas abstractas (degradado negro → vino) con su descripción, más una
+   imagen vertical estrecha. */
+type HubItem = {
+  label: string;
+  sub?: string;
+  highlight?: boolean;
+  text?: string;
+  msg: string;
+};
+
+type HubModule = {
+  id: string;
+  n: string;
+  kicker: string;
+  word: string;
+  chip?: string;
+  desc: string;
+  side: string;
+  icon: LucideIcon;
+  image: string;
+  items: HubItem[];
+  /* Contenido adicional de la card (cuando el módulo tiene un solo plan) */
+  extra?: React.ReactNode;
+  /* Contenido propio que reemplaza la lista de planes (p. ej. el deslizador de videos) */
+  body?: React.ReactNode;
+};
+
+/* Card del plan: solo borde marcado, sin fondo (sobre el degradado negro → vino) */
+const planCard = (highlight?: boolean) =>
+  `plan-card flex flex-col rounded-2xl border p-5 transition-colors duration-500 md:p-6 ${
+    highlight ? "border-[#E7B9C4]" : "border-white/35 hover:border-white"
+  }`;
+
+function PlanTitle({ it, big = false }: { it: HubItem; big?: boolean }) {
+  return (
+    <div>
+      <p
+        key={it.label}
+        className={`hub-swap font-display leading-tight text-white ${
+          big ? "text-4xl xl:text-5xl" : "text-2xl"
+        }`}
+      >
+        {it.label}
+      </p>
+      {it.sub && (
+        <span className="mt-1 block text-[10px] uppercase tracking-[0.2em] text-white/50">
+          {it.sub}
+        </span>
+      )}
+    </div>
+  );
+}
+
+const CotizarLink = ({ msg }: { msg: string }) => (
+  <a
+    href={waLink(msg)}
+    target="_blank"
+    rel="noreferrer"
+    className="group mt-3 inline-flex items-center gap-1.5 text-[10px] font-medium uppercase tracking-[0.2em] text-[#E7B9C4]"
+  >
+    Cotizar
+    <span
+      aria-hidden
+      className="transition-transform duration-500 ease-[cubic-bezier(0.25,1,0.5,1)] group-hover:translate-x-1"
+    >
+      →
+    </span>
+  </a>
+);
+
+/* Edición: una sola card y un deslizador. Al moverlo cambia la cantidad de
+   videos, la descripción y el mensaje para cotizar. */
+function VideoSlider({ packages }: { packages: { qty: number; desc: string }[] }) {
+  const [idx, setIdx] = useState(0);
+  const pkg = packages[idx];
+  const pct = (idx / (packages.length - 1)) * 100;
+
+  return (
+    <div className={`${planCard()} mx-auto w-full max-w-xl items-center text-center`}>
+      <PlanTitle
+        it={{
+          label: `${pkg.qty} videos`,
+          msg: `Hola, me interesa cotizar un paquete de ${pkg.qty} videos`,
+        }}
+        big
+      />
+      <p
+        key={pkg.qty}
+        className="hub-swap mt-6 min-h-[2.5rem] max-w-sm text-sm leading-relaxed text-white/65"
+      >
+        {pkg.desc}
+      </p>
+
+      <div className="mt-6 w-full max-w-md">
+        <input
+          type="range"
+          min={0}
+          max={packages.length - 1}
+          step={1}
+          value={idx}
+          onChange={(e) => setIdx(Number(e.target.value))}
+          aria-label="Cantidad de videos"
+          aria-valuetext={`${pkg.qty} videos`}
+          className="video-range w-full"
+          style={{ "--pct": `${pct}%` } as React.CSSProperties}
+        />
+        <div className="mt-3 flex justify-between">
+          {packages.map((p, i) => (
+            <button
+              key={p.qty}
+              type="button"
+              onClick={() => setIdx(i)}
+              className={`w-8 text-xs tabular-nums transition-colors ${
+                i === idx ? "font-medium text-[#E7B9C4]" : "text-white/45 hover:text-white"
+              }`}
+            >
+              {p.qty}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <CotizarLink msg={`Hola, me interesa cotizar un paquete de ${pkg.qty} videos`} />
+    </div>
+  );
+}
+
+function ServicesHub({ id, modules }: { id?: string; modules: HubModule[] }) {
+  const [active, setActive] = useState(0);
+  const mod = modules[active];
+  const select = (i: number) => setActive(i);
+  const cols =
+    mod.items.length >= 5
+      ? "sm:grid-cols-3 lg:grid-cols-5"
+      : mod.items.length === 3
+        ? "sm:grid-cols-3"
+        : "sm:grid-cols-2";
+
+  return (
+    <div
+      id={id}
+      data-reveal
+      data-snap
+      className="paper mt-12 scroll-mt-24 rounded-[2.5rem] p-4 md:mt-16 md:p-5 lg:h-[calc(100svh-7rem)] lg:min-h-[600px]"
+    >
+      <div className="grid grid-cols-1 gap-4 lg:h-full lg:grid-cols-12">
+        {/* Barra lateral */}
+        <nav
+          aria-label="Servicios complementarios"
+          className="-mx-1 flex gap-3 overflow-x-auto px-1 pb-1 lg:col-span-3 lg:mx-0 lg:flex-col lg:overflow-visible lg:px-0 lg:pb-0"
+        >
+          {modules.map((m, i) => {
+            const on = i === active;
+            const Icon = m.icon;
+            return (
+              <button
+                key={m.id}
+                type="button"
+                aria-pressed={on}
+                onClick={() => select(i)}
+                className={`group flex min-w-[220px] items-center gap-3 rounded-2xl border px-4 py-3.5 text-left transition-all duration-500 ease-[cubic-bezier(0.25,1,0.5,1)] lg:min-w-0 ${
+                  on
+                    ? "border-[#171715] bg-[#171715] text-white shadow-[0_18px_40px_-24px_rgba(23,23,21,0.6)]"
+                    : "border-[#171715]/10 bg-white text-[#171715] hover:border-[#171715]/40"
+                }`}
+              >
+                <span
+                  aria-hidden
+                  className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-full border ${
+                    on ? "border-white/25" : "border-[#171715]/15"
+                  }`}
+                >
+                  <Icon size={16} strokeWidth={1.4} />
+                </span>
+                <span className="min-w-0 flex-1">
+                  <span
+                    className={`block text-[10px] uppercase tracking-[0.2em] ${
+                      on ? "text-white/55" : "text-[#77746E]"
+                    }`}
+                  >
+                    Servicio {m.n}
+                  </span>
+                  <span className="block font-display text-xl leading-tight">
+                    {m.kicker} {m.word}
+                  </span>
+                  <span className={`block text-xs ${on ? "text-white/60" : "text-[#77746E]"}`}>
+                    {m.side}
+                  </span>
+                </span>
+                <ArrowRight
+                  aria-hidden
+                  size={16}
+                  strokeWidth={1.5}
+                  className={`shrink-0 transition-transform duration-500 ${
+                    on
+                      ? "translate-x-0.5"
+                      : "opacity-40 group-hover:translate-x-0.5 group-hover:opacity-100"
+                  }`}
+                />
+              </button>
+            );
+          })}
+        </nav>
+
+        {/* Módulo activo: todo consolidado en una sola tarjeta */}
+        <div
+          key={mod.id}
+          className="hub-swap hub-dark flex gap-5 overflow-hidden rounded-[2rem] border border-[#171715] bg-gradient-to-br from-[#0E0E0D] via-[#2A1A1F] to-[#6B1D2F] p-6 text-white md:p-7 lg:col-span-9 lg:min-h-0"
+        >
+          <div className="flex min-w-0 flex-1 flex-col">
+            <div className="flex flex-wrap items-end justify-between gap-x-10 gap-y-3">
+              <div className="flex flex-wrap items-end gap-x-4 gap-y-3">
+                <CoverTitle
+                  as="h3"
+                  size="sm"
+                  kicker={
+                    <>
+                      <span className="mr-2 text-[#C25A72]">{m2(mod.n)}</span>
+                      {mod.kicker}
+                    </>
+                  }
+                  word={mod.word}
+                  dark
+                />
+                {mod.chip && (
+                  <span className="mb-2 rounded-full border border-white/25 px-3 py-1 text-[10px] uppercase tracking-[0.2em] text-white">
+                    {mod.chip}
+                  </span>
+                )}
+              </div>
+              <p className="max-w-sm pb-1 text-sm leading-relaxed text-white/55">{mod.desc}</p>
+            </div>
+
+            <div className="mt-5 flex min-h-0 flex-1 items-center border-t border-white/10 pt-5">
+              {mod.body ? (
+                mod.body
+              ) : mod.extra ? (
+                /* Un solo plan: una card con el nombre a la izquierda y el detalle al costado */
+                <div className={`${planCard(mod.items[0].highlight)} w-full gap-4`}>
+                  <PlanTitle it={mod.items[0]} />
+                  <div className="min-w-0 border-t border-white/15 pt-4">
+                    {mod.extra}
+                    <CotizarLink msg={mod.items[0].msg} />
+                  </div>
+                </div>
+              ) : (
+                /* Varios planes: cards con borde, descripción y cotizar */
+                <div className={`grid w-full grid-cols-1 gap-4 ${cols}`}>
+                  {mod.items.map((it) => (
+                    <div key={it.label} className={planCard(it.highlight)}>
+                      <PlanTitle it={it} />
+                      {it.text && (
+                        <p className="mt-4 flex-1 text-xs leading-relaxed text-white/65 xl:text-[13px]">
+                          {it.text}
+                        </p>
+                      )}
+                      <div className="mt-4 border-t border-white/15 pt-1">
+                        <CotizarLink msg={it.msg} />
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* Imagen vertical estrecha */}
+          <div className="relative hidden w-24 shrink-0 overflow-hidden rounded-[1.5rem] bg-[#171715] md:block xl:w-28">
+            {modules.map((m, i) => (
+              <img
+                key={m.id}
+                src={m.image}
+                alt=""
+                aria-hidden
+                loading="lazy"
+                className={`absolute inset-0 h-full w-full object-cover transition-[opacity,transform] duration-1000 ease-[cubic-bezier(0.25,1,0.5,1)] ${
+                  i === active ? "scale-100 opacity-100" : "scale-105 opacity-0"
+                }`}
+              />
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* "3" → "03" */
+const m2 = (n: string) => n.padStart(2, "0");
+
 function Pricing() {
-  const creationPlans = [
+  const creationPlans: {
+    tag: string;
+    sub: string;
+    bullets: string[];
+    contentCount: string;
+    distributions: string[];
+    note: string;
+    highlight: boolean;
+    tone: Tone;
+    icon: LucideIcon;
+  }[] = [
     {
-      tag: "✦ Esencial",
+      tag: "Esencial",
+      icon: Sparkle,
       sub: "Para marcas que necesitan contenido constante sin contratar una gestión completa.",
-      price: "S/ 750",
-      priceRegular: "S/ 950",
-      priceNote: "mensuales durante los primeros 3 meses",
       bullets: [
         "Reunión mensual de planificación",
         "1 sesión de grabación de hasta 3 a 4 horas",
@@ -1259,21 +1921,15 @@ function Pricing() {
         "Sugerencia de días y horarios óptimos para publicar",
       ],
       contentCount: "8 contenidos",
-      distributions: [
-        "4 Reels + 4 piezas gráficas",
-        "6 Reels + 2 piezas gráficas",
-        "8 Reels",
-      ],
-      distributionNote: "",
+      distributions: ["4 Reels + 4 piezas gráficas", "6 Reels + 2 piezas gráficas", "8 Reels"],
       note: "No incluye publicación ni stories.",
       highlight: false,
+      tone: "light",
     },
     {
-      tag: "⭐ Crecimiento",
+      tag: "Crecimiento",
+      icon: TrendingUp,
       sub: "Para marcas que quieren una producción más constante y estratégica.",
-      price: "S/ 1,150",
-      priceRegular: "S/ 1,450",
-      priceNote: "mensuales durante los primeros 3 meses",
       bullets: [
         "Reunión de planificación de grabación mensual",
         "Investigación de tendencias y referencias",
@@ -1293,16 +1949,14 @@ function Pricing() {
         "8 Reels + 4 piezas gráficas",
         "10 Reels + 2 piezas gráficas",
       ],
-      distributionNote: "",
       note: "No incluye publicación ni stories.",
       highlight: true,
+      tone: "wine",
     },
     {
-      tag: "✦ Marca",
+      tag: "Marca",
+      icon: Gem,
       sub: "Para marcas que necesitan una producción visual más completa.",
-      price: "S/ 1,650",
-      priceRegular: "S/ 1,900",
-      priceNote: "mensuales durante los primeros 3 meses",
       bullets: [
         "Reunión de planificación de grabación mensual",
         "Investigación de tendencias y referencias",
@@ -1323,26 +1977,32 @@ function Pricing() {
         "10 Reels + 4 piezas gráficas",
         "12 Reels + 2 piezas gráficas",
       ],
-      distributionNote: "",
       note: "No incluye publicación ni stories.",
       highlight: false,
+      tone: "light",
     },
   ];
 
   const gestionLevels = [
     {
       name: "Básica",
-      price: "+S/ 150",
+      icon: CalendarDays,
       items: ["Programación", "Publicación", "8 stories mensuales", "Calendario de publicación"],
     },
     {
       name: "Completa",
-      price: "+S/ 250",
-      items: ["Programación", "Publicación", "16 stories mensuales", "Calendario de publicación", "Reporte mensual"],
+      icon: LayoutGrid,
+      items: [
+        "Programación",
+        "Publicación",
+        "16 stories mensuales",
+        "Calendario de publicación",
+        "Reporte mensual",
+      ],
     },
     {
       name: "Estratégica",
-      price: "+S/ 450",
+      icon: ChartLine,
       items: [
         "Todo lo anterior",
         "Análisis de métricas",
@@ -1352,720 +2012,523 @@ function Pricing() {
     },
   ];
 
+  const extras = [
+    {
+      t: "Pack 5 stories",
+      icon: Layers,
+      d: "Algunos en bloques de 3: portada, contenido principal, cierre + CTA.",
+    },
+    {
+      t: "Cobertura de eventos",
+      icon: Camera,
+      d: "Cobertura audiovisual en locación con registro para redes. El cliente cubre movilidad.",
+    },
+    {
+      t: "Entrega prioritaria 24h",
+      icon: Clock,
+      d: "Recibe tu contenido editado y listo para publicar en 24 horas tras la sesión.",
+    },
+  ];
+
   const adTiers = [
     {
       name: "Prueba inicial",
-      budget: "S/ 500–700 al mes",
-      meta: "S/ 350–450",
-      google: "S/ 400–500",
+      icon: FlaskConical,
+      scope: "Meta Ads · Google Ads",
+      desc: "Monitoreo semanal, optimización continua y reporte mensual de resultados para marcas que inician en pauta.",
     },
     {
       name: "Recomendada",
-      budget: "S/ 900–1,300 al mes",
-      meta: "S/ 500–650",
-      google: "S/ 550–700",
+      icon: Target,
+      scope: "Meta Ads · Google Ads",
+      desc: "Estrategia de conversión, pruebas de creativos y optimización de CPL orientada a ventas o leads calificados.",
     },
     {
       name: "Crecimiento",
-      budget: "desde S/ 1,500 al mes",
-      meta: "desde S/ 750 (o 15%)",
-      google: "desde S/ 850 (o 17%)",
+      icon: Rocket,
+      scope: "Meta Ads · Google Ads",
+      desc: "Gestión avanzada de presupuestos de escalamiento con reporting analítico continuo y afinamiento de audiencias.",
     },
   ];
 
+  const creatorDeliverables = [
+    "Desarrollo de 10 ideas y guiones",
+    "Edición profesional de 10 videos",
+    "1 reunión breve de planificación mensual",
+    "Subtítulos",
+    "1 jornada de grabación de hasta 4 horas",
+    "Música/sonidos y recursos de edición",
+    "Grabación con equipo profesional",
+    "Entrega optimizada: TikTok, Reels, Shorts",
+    "Dirección durante la grabación",
+    "1 ronda de cambios por video",
+  ];
+
   const videoPackages = [
-    { qty: 4, full: 650, edit: 400 },
-    { qty: 6, full: 900, edit: 550 },
-    { qty: 8, full: 1150, edit: 700 },
-    { qty: 10, full: 1400, edit: 850 },
-    { qty: 12, full: 1650, edit: 1000 },
+    { qty: 4, desc: "Ideal para campañas específicas o lanzamientos" },
+    { qty: 6, desc: "Flujo constante para un mes de presencia activa" },
+    { qty: 8, desc: "Cobertura semanal con 2 publicaciones audiovisuales" },
+    { qty: 10, desc: "Volumen ideal para marcas con presencia diaria" },
+    { qty: 12, desc: "Edición integral intensiva con alta frecuencia" },
+  ];
+
+  /* Gestión: las cards empiezan cerradas; cada una se abre/cierra por separado */
+  const [gestionOpen, setGestionOpen] = useState<string[]>([]);
+
+  const keyOf = (s: string) =>
+    s
+      .toLowerCase()
+      .normalize("NFD")
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/(^-|-$)/g, "");
+
+  const cta = (tone: Tone, msg: string, i = 0) => (
+    <div className="cta-wrap mt-8 sm:max-w-xs" style={{ "--i": i } as React.CSSProperties}>
+      <CardButton tone={tone} href={waLink(msg)} external>
+        <span>Cotizar</span>
+        <span
+          aria-hidden
+          className="transition-transform duration-500 ease-[cubic-bezier(0.25,1,0.5,1)] group-hover:translate-x-1.5"
+        >
+          →
+        </span>
+      </CardButton>
+    </div>
+  );
+
+  const bulletList = (tone: Tone, items: string[], Mark: LucideIcon = Check, cols = false) => (
+    <ul
+      className={`grid grid-cols-1 gap-x-8 gap-y-2 text-sm ${cols ? "sm:grid-cols-2 lg:grid-cols-1" : ""} ${TONES[tone].sub}`}
+    >
+      {items.map((b, i) => (
+        <li
+          key={b}
+          className="flex items-start gap-2.5"
+          style={{ "--i": i } as React.CSSProperties}
+        >
+          <Mark size={14} strokeWidth={1.75} className={`mt-1 shrink-0 ${TONES[tone].accent}`} />
+          <span>{b}</span>
+        </li>
+      ))}
+    </ul>
+  );
+
+  const hubModules: HubModule[] = [
+    {
+      id: "extras",
+      n: "3",
+      kicker: "Servicios",
+      word: "Extra",
+      desc: "Módulos complementarios para necesidades específicas, activaciones y coberturas puntuales.",
+      side: "Coberturas puntuales",
+      icon: Layers,
+      image: "/sec2/1.jpeg",
+      items: extras.map((x) => ({
+        label: x.t,
+        text: x.d,
+        msg: `Hola, me interesa cotizar: ${x.t}`,
+      })),
+    },
+    {
+      id: "pauta",
+      n: "4",
+      kicker: "Gestión de",
+      word: "Pauta",
+      chip: "Meta Ads · Google Ads",
+      desc: "El fee de gestión es independiente del presupuesto de pauta, que se paga directamente a la plataforma (Meta o Google).",
+      side: "Meta Ads · Google Ads",
+      icon: Target,
+      image: "/sec2/2.jpeg",
+      items: adTiers.map((x) => ({
+        label: x.name,
+        highlight: x.name === "Recomendada",
+        text: x.desc,
+        msg: `Hola, me interesa gestión de pauta: ${x.name}`,
+      })),
+    },
+    {
+      id: "creadoras",
+      n: "5",
+      kicker: "Contenido mensual para",
+      word: "Creadoras",
+      chip: "Nuevo",
+      desc: "Conceptualizamos, guionizamos, grabamos y editamos. Pensado para influencers y creadoras de contenido.",
+      side: "10 videos por mes",
+      icon: Clapperboard,
+      image: "/sec2/3.jpeg",
+      items: [
+        {
+          label: "Plan Creadoras",
+          sub: "10 videos / mes",
+          msg: "Hola, me interesa el plan para creadoras",
+        },
+      ],
+      extra: (
+        <>
+          <CardTag tone="noir">Entregables incluidos</CardTag>
+          <div className="mt-3 text-xs md:[&>ul]:grid-cols-2 xl:[&>ul]:grid-cols-3 [&>ul]:gap-y-1.5">
+            {bulletList("noir", creatorDeliverables, Check)}
+          </div>
+          <p className="mt-3 text-xs leading-relaxed text-white/50">
+            <strong className="font-medium text-white">No incluye:</strong> Publicación y community
+            management. La gestión de contenido se cotiza aparte.
+          </p>
+        </>
+      ),
+    },
+    {
+      id: "edicion",
+      n: "6",
+      kicker: "Videos",
+      word: "Edición",
+      desc: "Edito tus contenidos ya grabados y los convierto en resultados profesionales.",
+      side: "Videos ya grabados",
+      icon: Scissors,
+      image: "/sec2/4.jpeg",
+      items: [],
+      body: <VideoSlider packages={videoPackages} />,
+    },
   ];
 
   return (
-    <section id="planes" className="py-24 md:py-36">
-      <div className="mx-auto max-w-[1400px] px-6 md:px-10">
-        <SectionLabel num="05" label="Planes" />
-        <Reveal>
-          <h2
-            className="font-display font-medium"
-            style={{ fontSize: "clamp(2rem,5.5vw,4.5rem)", letterSpacing: "-0.035em", lineHeight: 1 }}
-          >
-            Planes pensados para{" "}
-            <em className="not-italic font-medium text-magenta">tu etapa.</em>
-          </h2>
-          <p className="mt-6 max-w-2xl text-sm text-foreground/65">
-            Antes de iniciar cualquier plan se realiza un Onboarding Estratégico (pago único S/ 350). Sin costo al contratar un plan mensual de 3 meses.
-          </p>
-        </Reveal>
+    <section id="planes" className="pb-12 md:pb-16">
+      <div className="mx-auto max-w-[1440px] px-6 md:px-12">
+        {/* 1. Creación de contenido: los tres planes en una sola pantalla */}
+        <div className="flex flex-col justify-center py-8 lg:min-h-[calc(100svh-72px)] lg:py-6">
+          <div className="paper rounded-[2.5rem] px-6 py-8 md:px-10 md:py-7">
+            <GroupHeader
+              id="planes-creacion"
+              n="1"
+              kicker="Planes de"
+              word="Creación"
+              desc="Este es el servicio principal. Aquí se piensa, produce y edita el contenido de tu marca."
+            />
 
-        {/* ─── 1. Creación de Contenido ─── */}
-        <Reveal className="mt-16">
-          <div className="mb-10 flex items-center gap-4">
-            <h3 className="font-display text-xl font-medium text-magenta md:text-2xl">1. Planes de Creación de Contenido</h3>
-            <span className="h-px flex-1 bg-foreground/15" />
-          </div>
-          <p className="text-sm text-foreground/60 max-w-2xl -mt-4 mb-10">
-            Este es el servicio principal. Aquí se piensa, produce y edita el contenido de tu marca.
-          </p>
-        </Reveal>
-
-        <div className="grid grid-cols-1 gap-5 md:grid-cols-3">
-          {creationPlans.map((p, i) => (
-            <Reveal
-              key={p.tag}
-              delay={i * 80}
-              className={`relative flex flex-col rounded-3xl border bg-white p-8 md:p-10 ${p.highlight ? "border-magenta" : "border-foreground/15"
-                }`}
-            >
-              {p.highlight && (
-                <span className="absolute -top-3 left-8 rounded-full bg-magenta px-3 py-1 text-[10px] uppercase tracking-[0.25em] text-magenta-foreground">
-                  Recomendado
-                </span>
-              )}
-              <div className="font-display text-lg font-medium">{p.tag}</div>
-              <p className="mt-2 text-sm text-foreground/60">{p.sub}</p>
-
-              <div className="mt-8">
-                <div className="flex items-baseline gap-2">
-                  <span
-                    className="font-display font-medium"
-                    style={{ fontSize: "clamp(2.5rem,4vw,3.5rem)", letterSpacing: "-0.04em", lineHeight: 1 }}
+            <div className="grid grid-cols-1 items-stretch gap-5 lg:grid-cols-3">
+              {creationPlans.map((p, idx) => {
+                const hl = p.highlight;
+                const tone: Tone = hl ? "noir" : "light";
+                const t = TONES[tone];
+                const Icon = p.icon;
+                const card = (
+                  <article
+                    className={`flex h-full flex-col p-6 xl:p-7 ${
+                      hl
+                        ? "rounded-[calc(2rem-2px)] bg-gradient-to-br from-[#171715] via-[#2A1A1F] to-[#6B1D2F] text-white"
+                        : "rounded-[2rem] border border-[#171715]/15 bg-white text-[#171715] transition-colors duration-500 hover:border-[#171715]/50"
+                    }`}
                   >
-                    {p.price}
-                  </span>
-                  <span className="text-sm text-foreground/55">{p.priceNote}</span>
-                </div>
-                <div className="mt-1.5 flex items-center gap-2">
-                  <span className="text-sm text-foreground/40 line-through">{p.priceRegular}</span>
-                  <span className="text-xs text-foreground/50">precio regular</span>
-                </div>
-              </div>
+                    {/* Encabezado */}
+                    <div className="flex items-center justify-between">
+                      <span className={`text-[10px] uppercase tracking-[0.25em] ${t.tag}`}>
+                        0{idx + 1} · {p.contentCount}
+                      </span>
+                      {hl && (
+                        <span className="rounded-full border border-white/30 px-3 py-1 text-[9px] uppercase tracking-[0.2em] text-white">
+                          Recomendado
+                        </span>
+                      )}
+                    </div>
+                    <h4 className="mt-4 flex items-center gap-3 font-display text-4xl leading-none xl:text-[2.75rem]">
+                      <Icon size={22} strokeWidth={1.25} className={t.accent} />
+                      {p.tag}
+                    </h4>
+                    <p className={`mt-3 text-[13px] leading-relaxed ${t.sub}`}>{p.sub}</p>
 
-              <ul className="mt-8 flex-1 space-y-3 border-t border-foreground/15 pt-6 text-sm">
-                {p.bullets.map((b) => (
-                  <li key={b} className="flex items-start gap-3">
-                    <span
-                      className={`mt-2 inline-block h-1 w-1 rounded-full ${p.highlight ? "bg-magenta" : "bg-foreground/40"
-                        }`}
-                    />
-                    <span className="text-foreground/80">{b}</span>
-                  </li>
-                ))}
-              </ul>
+                    {/* Opciones a elegir */}
+                    <div className={`mt-5 border-t pt-4 ${t.line}`}>
+                      <span className={`text-[10px] uppercase tracking-[0.2em] ${t.tag}`}>
+                        Opciones a elegir
+                      </span>
+                      <div className="mt-2.5 flex flex-wrap gap-1.5">
+                        {p.distributions.map((d) => (
+                          <span
+                            key={d}
+                            className={`rounded-full border px-2.5 py-1 text-[11px] ${
+                              hl
+                                ? "border-white/25 text-white/85"
+                                : "border-[#171715]/15 text-[#171715]/80"
+                            }`}
+                          >
+                            {d}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
 
-              {/* Distribution options */}
-              <div className="mt-6 rounded-2xl border border-foreground/10 bg-foreground/[0.02] p-5">
-                <div className="text-xs font-semibold uppercase tracking-widest text-foreground/50 mb-3">
-                  {p.contentCount ? `${p.contentCount} — ` : ""}Puedes elegir:
-                </div>
-                {p.distributions.map((d) => (
-                  <div key={d} className="flex items-start gap-2 text-sm text-foreground/70 mb-1.5">
-                    <span className="text-magenta mt-0.5">●</span>
-                    <span>{d}</span>
+                    {/* Incluye */}
+                    <div className={`mt-5 border-t pt-4 ${t.line}`}>
+                      <span className={`text-[10px] uppercase tracking-[0.2em] ${t.tag}`}>
+                        Incluye en producción
+                      </span>
+                      <ul
+                        className={`mt-2.5 grid grid-cols-2 gap-x-4 gap-y-1.5 text-[12px] leading-snug ${t.sub}`}
+                      >
+                        {p.bullets.map((b) => (
+                          <li key={b} className="flex items-start gap-1.5">
+                            <Check
+                              size={12}
+                              strokeWidth={2}
+                              className={`mt-[3px] shrink-0 ${t.accent}`}
+                            />
+                            <span>{b}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+
+                    <p className={`mt-4 text-[11px] ${t.tag}`}>{p.note}</p>
+
+                    <div className="mt-auto pt-5">
+                      <CardButton
+                        tone={tone}
+                        href={waLink(`Hola, me interesa el plan ${p.tag}`)}
+                        external
+                      >
+                        <span>Cotizar</span>
+                        <span
+                          aria-hidden
+                          className="transition-transform duration-500 ease-[cubic-bezier(0.25,1,0.5,1)] group-hover:translate-x-1.5"
+                        >
+                          →
+                        </span>
+                      </CardButton>
+                    </div>
+                  </article>
+                );
+                return (
+                  <div key={p.tag} data-reveal className="h-full">
+                    {hl ? <div className="glow-border h-full">{card}</div> : card}
                   </div>
-                ))}
-                {p.distributionNote && (
-                  <p className="mt-3 text-[11px] text-foreground/45 italic">{p.distributionNote}</p>
-                )}
-              </div>
-
-              {/* Note */}
-              <p className="mt-4 text-xs font-medium text-foreground/50 italic">{p.note}</p>
-
-              <a
-                href={`https://wa.me/51994404466?text=Hola,%20me%20interesa%20el%20plan%20${encodeURIComponent(p.tag)}`}
-                target="_blank"
-                rel="noreferrer"
-                className={`mt-8 inline-flex items-center justify-between rounded-full px-5 py-3 text-sm transition ${p.highlight
-                  ? "bg-magenta text-magenta-foreground hover:scale-[1.02]"
-                  : "border border-foreground/20 text-foreground hover:border-magenta hover:text-magenta"
-                  }`}
-              >
-                Elegir plan
-                <span>→</span>
-              </a>
-            </Reveal>
-          ))}
+                );
+              })}
+            </div>
+          </div>
         </div>
 
-        {/* ─── 2. Gestión de Contenido ─── */}
-        <Reveal className="mt-24">
-          <div className="mb-10 flex items-center gap-4">
-            <h3 className="font-display text-xl font-medium text-magenta md:text-2xl">2. Planes de Gestión de Contenido</h3>
-            <span className="text-xs uppercase tracking-[0.3em] text-foreground/55 ml-2">Add-on</span>
-            <span className="h-px flex-1 bg-foreground/15" />
-          </div>
-          <p className="text-sm text-foreground/60 max-w-2xl -mt-4 mb-4">
-            Servicio complementario. Se puede añadir a cualquiera de los planes de creación, desde S/ 150 adicionales al mes.
-          </p>
-          <div className="inline-flex items-center gap-3 rounded-2xl border border-magenta/30 bg-magenta/10 px-5 py-2.5 mb-10">
-            <span className="font-display text-lg font-bold text-magenta">Desde S/ 150</span>
-            <span className="text-sm text-foreground/70">adicionales al mes</span>
-          </div>
-        </Reveal>
+        {/* 2. Gestión de contenido: título + tira de collage arriba, cards en fila debajo
+            (compacto para que todo quepa en una pantalla) */}
+        <div
+          id="planes-gestion"
+          data-snap
+          className="paper mt-12 scroll-mt-24 rounded-[2.5rem] px-6 py-8 md:mt-16 md:px-10 md:py-9"
+        >
+          <div className="grid grid-cols-1 items-end gap-8 lg:grid-cols-12 lg:gap-10">
+            <div className="lg:col-span-5 [&>div]:mb-0! [&>div]:mt-0!">
+              <GroupHeader
+                n="2"
+                kicker="Planes de"
+                word="Gestión"
+                chip="Add-on complementario"
+                desc="Servicio complementario. Se puede añadir a cualquiera de los planes de creación para gestionar la publicación diaria y optimización."
+              />
+            </div>
 
-        <div className="grid grid-cols-1 gap-5 md:grid-cols-3">
-          {gestionLevels.map((g, i) => (
-            <Reveal key={g.name} delay={i * 80}>
-              <div
-                className={`relative flex flex-col rounded-3xl border p-8 md:p-10 transition-all duration-500 hover:-translate-y-2 hover:shadow-xl ${i === 2 ? "border-magenta bg-[#FDF0F3]" : "border-foreground/15 bg-white"
-                  }`}
-              >
-                <div className="font-display text-lg font-medium">{g.name}</div>
-                <div className="mt-3 flex items-baseline gap-1">
-                  <span
-                    className="font-display text-3xl font-medium text-magenta"
-                    style={{ letterSpacing: "-0.03em" }}
-                  >
-                    {g.price}
-                  </span>
-                  <span className="text-sm text-foreground/55">/ mes</span>
-                </div>
-                <ul className="mt-6 flex-1 space-y-2.5 border-t border-foreground/15 pt-5 text-sm">
-                  {g.items.map((item) => (
-                    <li key={item} className="flex items-start gap-3">
-                      <span className="mt-2 inline-block h-1 w-1 rounded-full bg-magenta" />
-                      <span className="text-foreground/75">{item}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </Reveal>
-          ))}
-        </div>
-
-        {/* Combination note */}
-        <Reveal className="mt-12">
-          <div className="rounded-2xl border border-foreground/10 bg-foreground/[0.02] p-8 text-center max-w-2xl mx-auto">
-            <p className="text-sm text-foreground/70">
-              Puedes elegir:{" "}
-              <strong className="text-foreground">Creación de contenido + Gestión</strong>{" "}
-              o solamente:{" "}
-              <strong className="text-foreground">Creación de contenido.</strong>
-            </p>
-          </div>
-        </Reveal>
-
-        {/* ─── 3. Servicios Extra ─── */}
-        <Reveal className="mt-24">
-          <div className="mb-10 flex items-center gap-4">
-            <h3 className="font-display text-xl font-medium text-magenta md:text-2xl">3. Servicios Extra</h3>
-            <span className="h-px flex-1 bg-foreground/15" />
+            <EditorialCollage className="hidden lg:col-span-7 lg:block" />
           </div>
 
-          <div className="grid grid-cols-1 gap-5 md:grid-cols-3">
-            {[
-              {
-                t: "Pack 5 stories",
-                p: "S/ 60",
-                d: "Algunos en bloques de 3: portada, contenido principal, cierre + CTA.",
-              },
-              {
-                t: "Cobertura de eventos",
-                p: "Desde S/ 200",
-                d: "Primeras 3h cubiertas: S/ 200. Hora adicional: S/ 90. El cliente cubre movilidad.",
-              },
-              {
-                t: "Entrega prioritaria 24h",
-                p: "+30%",
-                d: "Recibe tu contenido en 24 horas con un recargo del 30% sobre el servicio.",
-              },
-            ].map(({ t, p, d }, i) => {
-              const cardStyles = [
-                {
-                  bg: "bg-gradient-to-br from-[#2D0A18] to-[#6F123B]",
-                  text: "text-white",
-                  sub: "text-white/70",
-                  num: "text-white/10",
-                  border: "border-[#8B1743]/50",
-                },
-                {
-                  bg: "bg-gradient-to-br from-[#8B1743] to-[#C93B69]",
-                  text: "text-white",
-                  sub: "text-white/80",
-                  num: "text-white/20",
-                  border: "border-[#D86B86]/40",
-                },
-                {
-                  bg: "bg-gradient-to-br from-[#D86B86] to-[#F4B3BD]",
-                  text: "text-[#3D0E20]",
-                  sub: "text-[#3D0E20]/70",
-                  num: "text-[#3D0E20]/15",
-                  border: "border-white/40",
-                },
-              ];
-              const st = cardStyles[i];
+          <div className="mt-8 grid grid-cols-1 gap-5 lg:grid-cols-3">
+            {gestionLevels.map((g, i) => {
+              const tone: Tone = "light";
+              const key = `gestion-${keyOf(g.name)}`;
+              const open = gestionOpen.includes(key);
               return (
-                <div
-                  key={t}
-                  className={`group relative flex min-h-[280px] flex-col justify-between overflow-hidden rounded-[2rem] border ${st.border} ${st.bg} p-8 shadow-lg transition-all duration-500 ease-out hover:-translate-y-4 hover:scale-[1.03] hover:shadow-2xl`}
+                <AccordionItem
+                  key={g.name}
+                  id={key}
+                  tone={tone}
+                  tag={`Nivel 0${i + 1}`}
+                  title={g.name}
+                  icon={g.icon}
+                  curtain
+                  open={open}
+                  onToggle={() =>
+                    setGestionOpen((cur) => (open ? cur.filter((k) => k !== key) : [...cur, key]))
+                  }
                 >
-                  <div className="absolute left-6 top-6 flex flex-col gap-3 opacity-30 mix-blend-multiply">
-                    <div className="h-3 w-3 rounded-full bg-current shadow-inner" />
-                    <div className="h-3 w-3 rounded-full bg-current shadow-inner" />
-                  </div>
-
-                  <div className="relative z-10 mt-6">
-                    <h4 className={`font-display text-2xl font-extrabold leading-tight tracking-tight ${st.text}`}>{t}</h4>
-                    <p className={`mt-3 text-sm leading-relaxed ${st.sub}`}>{d}</p>
-                    <a
-                      href={`https://wa.me/51994404466?text=Hola,%20me%20interesa%20cotizar:%20${encodeURIComponent(t)}`}
-                      target="_blank"
-                      rel="noreferrer"
-                      className={`mt-4 font-serif italic text-lg inline-block transition-transform hover:translate-x-1 ${st.text}`}
-                    >
-                      {p} <span className="text-sm">→</span>
-                    </a>
-                  </div>
-
-                  <div className={`absolute -bottom-8 -right-4 font-display text-[10rem] font-black leading-none ${st.num} transition-transform duration-700 ease-out group-hover:scale-110 group-hover:-translate-x-2 group-hover:-translate-y-2`}>
-                    +
-                  </div>
-                  <div className="pointer-events-none absolute inset-0 bg-gradient-to-tr from-white/0 via-white/10 to-white/0 opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
-                </div>
+                  {bulletList(tone, g.items, Sparkle)}
+                  {cta(tone, `Hola, me interesa la gestión ${g.name}`, g.items.length)}
+                </AccordionItem>
               );
             })}
           </div>
-        </Reveal>
+        </div>
 
-        {/* ─── 4. Gestión de Pauta Publicitaria ─── */}
-        <Reveal className="mt-24">
-          <div className="mb-10 flex items-center gap-4">
-            <h3 className="font-display text-xl font-medium text-magenta md:text-2xl">4. Gestión de Pauta Publicitaria</h3>
-            <span className="text-xs uppercase tracking-[0.3em] text-foreground/55 ml-2">Meta Ads · Google Ads</span>
-            <span className="h-px flex-1 bg-foreground/15" />
-          </div>
-          <p className="text-sm text-foreground/60 max-w-3xl -mt-4 mb-10">
-            El fee de gestión es independiente del presupuesto de pauta, que se paga directamente a la plataforma (Meta o Google). Estos precios aplican para la gestión de una sola plataforma.
-          </p>
-
-          <div className="overflow-x-auto">
-            <table className="w-full min-w-[640px] text-sm border-collapse">
-              <thead>
-                <tr className="border-b border-foreground/15">
-                  <th className="text-left py-4 pr-6 font-display font-medium text-foreground/70 uppercase text-xs tracking-widest">Nivel</th>
-                  <th className="text-left py-4 pr-6 font-display font-medium text-foreground/70 uppercase text-xs tracking-widest">Pauta mensual</th>
-                  <th className="text-left py-4 pr-6 font-display font-medium text-foreground/70 uppercase text-xs tracking-widest">Fee Meta Ads</th>
-                  <th className="text-left py-4 font-display font-medium text-foreground/70 uppercase text-xs tracking-widest">Fee Google Ads</th>
-                </tr>
-              </thead>
-              <tbody>
-                {adTiers.map((tier, i) => (
-                  <tr key={tier.name} className={`border-b border-foreground/10 transition-colors hover:bg-foreground/[0.02] ${i === 1 ? "bg-magenta/[0.03]" : ""}`}>
-                    <td className="py-4 pr-6 font-display font-medium">{tier.name}</td>
-                    <td className="py-4 pr-6 text-foreground/70">{tier.budget}</td>
-                    <td className="py-4 pr-6 font-medium text-magenta">{tier.meta}</td>
-                    <td className="py-4 font-medium text-magenta">{tier.google}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-          <p className="mt-4 text-xs text-foreground/50 italic">
-            Incluye monitoreo semanal, optimización y reporte mensual de resultados. El monto de la pauta queda sujeto al presupuesto del cliente.
-          </p>
-        </Reveal>
-
-        {/* ─── 5. Contenido Mensual para Creadoras ─── */}
-        <Reveal className="mt-24">
-          <div className="mb-10 flex items-center gap-4">
-            <h3 className="font-display text-xl font-medium text-magenta md:text-2xl">5. Contenido Mensual para Creadoras</h3>
-            <span className="rounded-full bg-magenta/15 border border-magenta/30 px-3 py-0.5 text-[10px] font-bold uppercase tracking-widest text-magenta ml-2">Nuevo</span>
-            <span className="h-px flex-1 bg-foreground/15" />
-          </div>
-          <p className="text-sm text-foreground/60 max-w-2xl -mt-4 mb-4">
-            Conceptualizo, guionizo, grabo y edito. Para influencers y creadoras de contenido, no marcas.
-          </p>
-
-          <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
-            {/* Main plan card */}
-            <div className="relative flex flex-col rounded-3xl border border-magenta bg-white p-8 md:p-10 overflow-hidden">
-              <div className="font-display text-lg font-medium">🎬 Plan Creadoras</div>
-              <p className="mt-2 text-sm text-foreground/60">10 videos por mes</p>
-
-              <div className="mt-6 flex items-baseline gap-2">
-                <span className="font-display font-medium text-magenta" style={{ fontSize: "clamp(2.5rem,4vw,3.5rem)", letterSpacing: "-0.04em", lineHeight: 1 }}>
-                  S/ 1,300
-                </span>
-                <span className="text-sm text-foreground/55">/ mes</span>
-              </div>
-
-              <ul className="mt-8 flex-1 space-y-3 border-t border-foreground/15 pt-6 text-sm">
-                {[
-                  "Desarrollo de 10 ideas y guiones",
-                  "Edición profesional de 10 videos",
-                  "1 reunión breve de planificación mensual",
-                  "Subtítulos",
-                  "1 jornada de grabación de hasta 4 horas",
-                  "Música/sonidos y recursos de edición",
-                  "Grabación con equipo profesional",
-                  "Entrega optimizada: TikTok, Reels, Shorts",
-                  "Dirección durante la grabación",
-                  "1 ronda de cambios por video",
-                ].map((b) => (
-                  <li key={b} className="flex items-start gap-3">
-                    <span className="mt-2 inline-block h-1 w-1 rounded-full bg-magenta" />
-                    <span className="text-foreground/80">{b}</span>
-                  </li>
-                ))}
-              </ul>
-
-              <div className="mt-6 rounded-2xl border border-foreground/10 bg-foreground/[0.02] p-5">
-                <div className="text-xs font-semibold uppercase tracking-widest text-foreground/50 mb-3">No incluye:</div>
-                <p className="text-sm text-foreground/60">
-                  Publicación, community management, fotografía, modelos ni traslados fuera de Lima. La gestión de contenido se cotiza aparte.
-                </p>
-              </div>
-
-              <p className="mt-4 text-xs text-foreground/50 italic">
-                Si el contenido requiere más producción (cambios de vestuario, varias locaciones, storytelling, props), el rango sube a S/ 1,500–1,700.
-              </p>
-
-              <a
-                href="https://wa.me/51994404466?text=Hola,%20me%20interesa%20el%20plan%20para%20creadoras"
-                target="_blank"
-                rel="noreferrer"
-                className="mt-8 inline-flex items-center justify-between rounded-full bg-magenta px-5 py-3 text-sm text-magenta-foreground transition hover:scale-[1.02]"
-              >
-                Quiero este plan
-                <span>→</span>
-              </a>
-            </div>
-
-            {/* Video packages */}
-            <div className="relative flex flex-col rounded-3xl border border-foreground/15 bg-white p-8 md:p-10">
-              <div className="font-display text-lg font-medium">📦 Paquete por cantidad de videos</div>
-              <p className="mt-2 text-sm text-foreground/60">
-                Precios cerrados según la cantidad de videos que necesites, sin plan mensual ni permanencia.
-              </p>
-
-              <div className="mt-8 space-y-6 flex-1">
-                {/* Producción completa */}
-                <div>
-                  <div className="text-xs font-semibold uppercase tracking-widest text-foreground/50 mb-4">
-                    Producción completa <span className="normal-case tracking-normal font-normal">(idea + guion + grabación + edición)</span>
-                  </div>
-                  <div className="space-y-2">
-                    {videoPackages.map((pkg) => (
-                      <div key={`full-${pkg.qty}`} className="flex items-center justify-between rounded-xl bg-foreground/[0.02] border border-foreground/10 px-5 py-3 transition-colors hover:bg-magenta/[0.03]">
-                        <span className="text-sm font-medium">{pkg.qty} videos</span>
-                        <span className="font-display font-medium text-magenta">S/ {pkg.full.toLocaleString()}</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Solo edición */}
-                <div>
-                  <div className="text-xs font-semibold uppercase tracking-widest text-foreground/50 mb-4">
-                    Solo edición <span className="normal-case tracking-normal font-normal">(el cliente entrega el material grabado)</span>
-                  </div>
-                  <div className="space-y-2">
-                    {videoPackages.map((pkg) => (
-                      <div key={`edit-${pkg.qty}`} className="flex items-center justify-between rounded-xl bg-foreground/[0.02] border border-foreground/10 px-5 py-3 transition-colors hover:bg-magenta/[0.03]">
-                        <span className="text-sm font-medium">{pkg.qty} videos</span>
-                        <span className="font-display font-medium text-magenta">S/ {pkg.edit.toLocaleString()}</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
-
-              <a
-                href="https://wa.me/51994404466?text=Hola,%20me%20interesa%20cotizar%20un%20paquete%20de%20videos"
-                target="_blank"
-                rel="noreferrer"
-                className="mt-8 inline-flex items-center justify-between rounded-full border border-foreground/20 px-5 py-3 text-sm text-foreground transition hover:border-magenta hover:text-magenta"
-              >
-                Cotizar paquete
-                <span>→</span>
-              </a>
-            </div>
-          </div>
-        </Reveal>
+        {/* 3 a 6: servicios complementarios consolidados en un solo bloque */}
+        <ServicesHub id="planes-servicios" modules={hubModules} />
       </div>
     </section>
   );
 }
 
-
-/* ---------------- Contact ---------------- */
+/* ---------------- Contacto: sobrio, fondo negro, solo un comentario ---------------- */
 function Contact() {
-  const [activeStep, setActiveStep] = useState(0);
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setActiveStep((prev) => (prev + 1) % 4);
-    }, 2000);
-    return () => clearInterval(interval);
-  }, []);
-
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const fd = new FormData(e.currentTarget);
-    const nombre = fd.get("nombre");
-    const apellido = fd.get("apellido");
-    const celular = fd.get("celular");
-    const correo = fd.get("correo");
-
-    const text = `Hola Ana, me interesa contactarte.%0A%0A*Nombre:* ${nombre} ${apellido}%0A*Celular:* ${celular}${correo ? `%0A*Correo:* ${correo}` : ""
-      }`;
-    window.open(`https://wa.me/51994404466?text=${text}`, "_blank");
+    const mensaje = String(new FormData(e.currentTarget).get("mensaje") ?? "").trim();
+    if (!mensaje) return;
+    window.open(waLink(`Hola Ana, ${mensaje}`), "_blank");
   };
 
   return (
-    <section id="contacto" className="relative overflow-hidden bg-ink py-28 text-ink-foreground md:py-44">
-      {/* Animated Gradient Background - Encendidas y en movimiento */}
-      <div className="absolute inset-0 pointer-events-none z-0">
-        <div className="absolute -top-32 -left-32 h-[500px] w-[500px] rounded-full bg-gradient-to-br from-[#FF8EAA] to-magenta opacity-60 blur-[100px] animate-pulse" style={{ animationDuration: '6s' }} />
-        <div className="absolute top-[20%] -right-32 h-[600px] w-[600px] rounded-full bg-gradient-to-tl from-white to-[#D86B86] opacity-40 blur-[120px] animate-pulse" style={{ animationDuration: '9s' }} />
-      </div>
-
-      <div className="mx-auto max-w-[1400px] px-6 md:px-10 relative z-10">
-        <div className="mb-12 flex items-baseline gap-4">
-          <span className="font-display font-medium text-xl text-white md:text-2xl">06</span>
-          <span className="text-xs uppercase tracking-[0.3em] text-white/50">Contacto</span>
-          <span className="ml-2 h-px flex-1 bg-white/15" />
-        </div>
-
-        <div className="grid grid-cols-1 gap-16 lg:grid-cols-2 lg:gap-24">
-          <div>
-            <Reveal>
-              <h2
-                className="font-display font-medium"
-                style={{ fontSize: "clamp(2.5rem,6vw,5rem)", letterSpacing: "-0.04em", lineHeight: 0.95 }}
-              >
-                Empecemos a construir
-                <br />
-                <em className="not-italic font-medium text-[#FF8EAA]">tu marca</em> juntos.
-              </h2>
-              <p className="mt-8 text-white/70 max-w-md text-lg">
-                Los cupos de trabajo son limitados. Llena el formulario y coordinamos tu reunión de brief
-                gratuita de 30 minutos.
-              </p>
-            </Reveal>
-
-            <Reveal className="mt-12" delay={150}>
-              <ol className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                {[
-                  ["01", "Envía tus datos", "text-[#8B1743]"],
-                  ["02", "Reunión de brief", "text-[#6F123B]"],
-                  ["03", "Propuesta personalizada", "text-[#B8325E]"],
-                  ["04", "Inicio del proyecto", "text-[#9E2A54]"],
-                ].map(([n, t, textColor], i) => {
-                  const isActive = activeStep === i;
-                  return (
-                    <li
-                      key={n}
-                      className={`group rounded-2xl border border-white/60 bg-white p-6 shadow-lg transition-all duration-700 ease-out ${isActive
-                        ? "scale-[1.05] -translate-y-2 shadow-[0_15px_40px_rgba(255,142,170,0.3)] opacity-100"
-                        : "opacity-50 scale-100 translate-y-0 hover:opacity-80"
-                        }`}
-                    >
-                      <div className={`font-display font-bold transition-colors duration-700 ${isActive ? textColor : "text-black/30"}`}>{n}</div>
-                      <div className={`mt-2 font-display text-base font-bold transition-colors duration-700 ${isActive ? textColor : "text-black/60"}`}>{t}</div>
-                    </li>
-                  );
-                })}
-              </ol>
-            </Reveal>
+    <section
+      id="contacto"
+      data-nav-dark
+      className="flex items-center bg-[#0E0E0D] py-16 text-white lg:min-h-[calc(100svh-72px)] lg:py-12"
+    >
+      <div className="mx-auto w-full max-w-[1440px] px-6 md:px-12">
+        <div className="grid grid-cols-1 items-end gap-12 lg:grid-cols-12 lg:gap-16">
+          <div className="lg:col-span-5 [&>div]:mb-0!">
+            <SectionHeading kicker="Hagamos crecer" word="Tu marca" dark />
+            <p className="mt-6 max-w-sm text-sm leading-relaxed text-white/55">
+              Cuéntame en qué te puedo ayudar y te respondo por WhatsApp.
+            </p>
           </div>
 
-          <Reveal delay={200}>
-            <form onSubmit={handleSubmit} className="flex flex-col gap-6 rounded-[2rem] border border-white/15 bg-white/5 p-8 backdrop-blur-xl md:p-12 shadow-2xl relative overflow-hidden group">
-              <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent opacity-20 pointer-events-none" />
-
-              <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 relative z-10">
-                <div className="flex flex-col gap-2">
-                  <label htmlFor="nombre" className="text-sm font-medium text-white/80">Nombre</label>
-                  <input required type="text" name="nombre" id="nombre" className="rounded-xl border border-white/20 bg-white/5 px-4 py-3.5 text-white placeholder-white/30 outline-none transition focus:border-[#FF8EAA] focus:bg-white/10" placeholder="Tu nombre" />
-                </div>
-                <div className="flex flex-col gap-2">
-                  <label htmlFor="apellido" className="text-sm font-medium text-white/80">Apellido</label>
-                  <input required type="text" name="apellido" id="apellido" className="rounded-xl border border-white/20 bg-white/5 px-4 py-3.5 text-white placeholder-white/30 outline-none transition focus:border-[#FF8EAA] focus:bg-white/10" placeholder="Tu apellido" />
-                </div>
-              </div>
-
-              <div className="flex flex-col gap-2 relative z-10">
-                <label htmlFor="celular" className="text-sm font-medium text-white/80">Celular</label>
-                <input required type="tel" name="celular" id="celular" className="rounded-xl border border-white/20 bg-white/5 px-4 py-3.5 text-white placeholder-white/30 outline-none transition focus:border-[#FF8EAA] focus:bg-white/10" placeholder="+51 999 999 999" />
-              </div>
-
-              <div className="flex flex-col gap-2 relative z-10">
-                <label htmlFor="correo" className="text-sm font-medium text-white/80">Correo (Opcional)</label>
-                <input type="email" name="correo" id="correo" className="rounded-xl border border-white/20 bg-white/5 px-4 py-3.5 text-white placeholder-white/30 outline-none transition focus:border-[#FF8EAA] focus:bg-white/10" placeholder="hola@tumarca.com" />
-              </div>
-
-              <button type="submit" className="mt-6 relative z-10 flex w-full items-center justify-center gap-3 rounded-full bg-[#25D366] px-6 py-4 font-bold text-ink shadow-[0_8px_30px_rgba(37,211,102,0.3)] transition-all duration-300 hover:scale-[1.02] hover:bg-[#20bd5a] hover:shadow-[0_12px_40px_rgba(37,211,102,0.5)]">
-                Enviar a WhatsApp
-                <Smartphone className="h-5 w-5" />
+          <form onSubmit={handleSubmit} className="lg:col-span-7">
+            <label
+              htmlFor="mensaje"
+              className="block text-[10px] uppercase tracking-[0.25em] text-white/45"
+            >
+              Tu mensaje
+            </label>
+            <textarea
+              required
+              id="mensaje"
+              name="mensaje"
+              rows={4}
+              placeholder="Escribe aquí tu comentario…"
+              className="mt-4 w-full resize-none border-0 border-b border-white/20 bg-transparent pb-4 font-display text-2xl leading-snug text-white outline-none transition-colors placeholder:text-white/25 focus:border-white md:text-3xl"
+            />
+            <div className="mt-8 flex justify-end">
+              <button
+                type="submit"
+                className="group inline-flex items-center gap-4 rounded-full bg-white px-8 py-4 text-xs font-medium uppercase tracking-[0.18em] text-[#171715] transition-[background-color,transform] duration-500 ease-[cubic-bezier(0.25,1,0.5,1)] hover:scale-[1.03] hover:bg-[#F6E7EA]"
+              >
+                Enviar
+                <span
+                  aria-hidden
+                  className="transition-transform duration-500 ease-[cubic-bezier(0.25,1,0.5,1)] group-hover:translate-x-1.5"
+                >
+                  →
+                </span>
               </button>
-            </form>
-          </Reveal>
+            </div>
+          </form>
         </div>
       </div>
     </section>
   );
 }
 
-
-/* ---------------- Footer ---------------- */
+/* ---------------- Footer (Lundani Inspired) ---------------- */
 function Footer() {
   return (
-    <footer className="bg-[#3D0E20] py-16 text-white">
-      <div className="mx-auto max-w-[1400px] px-6 md:px-10">
-        <div className="flex flex-col items-center justify-between gap-12 md:flex-row md:items-start">
-          <div className="flex flex-col items-center md:items-start">
-            <img
-              src="/logo.png"
-              alt="Ani Creative Studio"
-              className="h-24 w-auto md:h-32"
-            />
-            <p className="mt-4 max-w-sm text-center text-sm text-white/60 md:text-left">
-              <span className="font-semibold text-white">Agencia Creativa de Marketing</span>{" "}
-              <span className="mt-1 inline-block rounded-full bg-[#F4B3BD] px-3 py-0.5 text-[10px] font-black uppercase tracking-widest text-[#6F123B] shadow-sm">
-                BY ANA LUISA GONZÁLEZ HIDALGO
-              </span>
-              <br />
-              <br />
-              Comunicación coherente, estética y alineada a los objetivos de tu marca.
+    <footer className="border-t border-[#D8D4CC] bg-[#EFEEE9] text-[#171715] py-12 md:py-16">
+      <div className="mx-auto max-w-[1440px] px-6 md:px-12">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 pb-16 border-b border-[#D8D4CC]">
+          <div className="lg:col-span-6">
+            <span className="font-display text-2xl md:text-3xl tracking-tight text-[#171715] block mb-4">
+              ANNA GONZÁLEZ
+            </span>
+            <p className="mt-4 text-sm text-[#77746E] max-w-md leading-relaxed">
+              Comunicadora Audiovisual, Content Manager y Freelance creativa, especialista en marcas
+              de belleza y moda.
             </p>
           </div>
 
-          <div className="flex flex-wrap justify-center gap-8 md:justify-end">
-            <div className="flex flex-col items-center gap-4 md:items-start">
-              <h4 className="font-display text-xs font-medium uppercase tracking-widest text-[#F4B3BD]">
-                Redes
-              </h4>
-              <a
-                href="https://www.instagram.com/annacore__/"
-                target="_blank"
-                rel="noreferrer"
-                className="flex items-center gap-2 text-sm text-white/70 transition-colors hover:text-white"
-              >
-                <Instagram size={18} />
-                Instagram
-              </a>
-              <a
-                href="https://www.tiktok.com/@lamanz.anita"
-                target="_blank"
-                rel="noreferrer"
-                className="flex items-center gap-2 text-sm text-white/70 transition-colors hover:text-white"
-              >
-                <svg
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  className="h-[18px] w-[18px]"
+          <div className="lg:col-span-3">
+            <span className="eyebrow text-[#77746E] block mb-4">Redes Sociales</span>
+            <ul className="space-y-3 text-sm">
+              <li>
+                <a
+                  href="https://www.instagram.com/annacore__/"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="link-u text-[#171715] hover:text-[#77746E]"
                 >
-                  <path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5" />
-                </svg>
-                TikTok
-              </a>
-              <a
-                href="https://www.behance.net/anagonzlez8/projects"
-                target="_blank"
-                rel="noreferrer"
-                className="flex items-center gap-2 text-sm text-white/70 transition-colors hover:text-white"
-              >
-                <svg
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  className="h-[18px] w-[18px]"
+                  <Instagram size={15} /> Instagram
+                </a>
+              </li>
+              <li>
+                <a
+                  href="https://www.tiktok.com/@lamanz.anita"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="link-u text-[#171715] hover:text-[#77746E]"
                 >
-                  <path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2Zm0 18a8 8 0 1 1 8-8 8 8 0 0 1-8 8Z" />
-                  <path d="M9 8h4.5a2.5 2.5 0 0 1 0 5H9Zm0 5h5.5a3 3 0 0 1 0 6H9Z" />
-                </svg>
-                Behance
-              </a>
-              <a
-                href="https://www.linkedin.com/in/anagonzalezhi/"
-                target="_blank"
-                rel="noreferrer"
-                className="flex items-center gap-2 text-sm text-white/70 transition-colors hover:text-white"
-              >
-                <Linkedin size={18} />
-                LinkedIn
-              </a>
-            </div>
+                  TikTok
+                </a>
+              </li>
+              <li>
+                <a
+                  href="https://www.behance.net/anagonzlez8/projects"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="link-u text-[#171715] hover:text-[#77746E]"
+                >
+                  Behance
+                </a>
+              </li>
+              <li>
+                <a
+                  href="https://www.linkedin.com/in/anagonzalezhi/"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="link-u text-[#171715] hover:text-[#77746E]"
+                >
+                  <Linkedin size={15} /> LinkedIn
+                </a>
+              </li>
+            </ul>
+          </div>
 
-            <div className="flex flex-col items-center gap-4 md:items-start">
-              <h4 className="font-display text-xs font-medium uppercase tracking-widest text-[#F4B3BD]">
-                Contacto
-              </h4>
-              <a
-                href="mailto:anagonzalezhi21@gmail.com"
-                className="flex items-center gap-2 text-sm text-white/70 transition-colors hover:text-white"
-              >
-                <Mail size={18} />
-                anagonzalezhi21@gmail.com
-              </a>
-              <a
-                href="https://wa.me/51994404466"
-                target="_blank"
-                rel="noreferrer"
-                className="flex items-center gap-2 text-sm text-white/70 transition-colors hover:text-white"
-              >
-                <Smartphone size={18} />
-                +51 994 404 466
-              </a>
-            </div>
+          <div className="lg:col-span-3">
+            <span className="eyebrow text-[#77746E] block mb-4">Contacto Directo</span>
+            <ul className="space-y-3 text-sm">
+              <li>
+                <a
+                  href="mailto:anagonzalezhi21@gmail.com"
+                  className="link-u text-[#171715] hover:text-[#77746E]"
+                >
+                  <Mail size={15} /> anagonzalezhi21@gmail.com
+                </a>
+              </li>
+              <li>
+                <a
+                  href="https://wa.me/51994404466"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="link-u text-[#171715] hover:text-[#77746E]"
+                >
+                  <Smartphone size={15} /> +51 994 404 466
+                </a>
+              </li>
+              <li className="pt-2 text-xs text-[#77746E]">Lima, Perú · Atención global</li>
+            </ul>
           </div>
         </div>
 
-        <div className="mt-16 flex flex-col items-center justify-between gap-4 border-t border-white/15 pt-8 text-xs text-white/40 md:flex-row">
-          <span>&copy; {new Date().getFullYear()} Ani Creative Studio. Todos los derechos reservados.</span>
-          <span className="flex items-center gap-2 text-white/60">
-            Web Design by JatzLab AI
-            <img src="/jatzlab.png" alt="JatzLab AI" className="h-10 w-auto" />
+        <div className="mt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-[#77746E]">
+          <span>
+            &copy; {new Date().getFullYear()} Anna González. Todos los derechos reservados.
           </span>
+          <div className="flex items-center gap-2">
+            <span>Web Design by JatzLab AI</span>
+            <img src="/jatzlab.png" alt="JatzLab AI" className="h-6 w-auto" />
+          </div>
         </div>
       </div>
     </footer>
   );
 }
 
-/* ---------------- Image Band ---------------- */
-function ImageBand() {
-  const items = [
-    { label: "Marca Beauty", color: "text-[#8B1743]", bg: "bg-[#F5E6EB]", icon: <Sparkles className="h-5 w-5 text-[#8B1743]" /> },
-    { label: "Sesión Moda", color: "text-[#6F123B]", bg: "bg-[#FCE8EC]", icon: <Camera className="h-5 w-5 text-[#6F123B]" /> },
-    { label: "Restaurante", color: "text-[#B8325E]", bg: "bg-[#FDF0F3]", icon: <Star className="h-5 w-5 text-[#B8325E]" /> },
-    { label: "Inmobiliaria", color: "text-[#8B1743]", bg: "bg-[#F5E6EB]", icon: <Layers className="h-5 w-5 text-[#8B1743]" /> },
-    { label: "Editorial", color: "text-[#D86B86]", bg: "bg-[#FCE8EC]", icon: <Film className="h-5 w-5 text-[#D86B86]" /> },
-    { label: "Producto", color: "text-[#9E2A54]", bg: "bg-[#FDF0F3]", icon: <Zap className="h-5 w-5 text-[#9E2A54]" /> },
-  ];
-  const seq = [...items, ...items, ...items, ...items];
-  return (
-    <div className="overflow-hidden border-y border-[#E8C9D0]/50 bg-[#FAF7F6] py-5">
-      <div className="overflow-hidden">
-        <div className="marquee-track flex items-center gap-6">
-          {seq.map((item, i) => (
-            <div
-              key={i}
-              className={`flex items-center gap-3 rounded-full border border-[#E8C9D0] ${item.bg} px-6 py-3 shadow-sm transition-all duration-300 hover:scale-105 shrink-0`}
-            >
-              {item.icon}
-              <span className={`font-display text-base font-bold tracking-tight ${item.color}`}>
-                {item.label}
-              </span>
-            </div>
-          ))}
-        </div>
-      </div>
-    </div>
-  );
-}
-
-/* ---------------- Page ---------------- */
+/* ---------------- Main Landing Page ---------------- */
 function LandingPage() {
+  const [isReady, setIsReady] = useState(false);
+  const rootRef = useRef<HTMLDivElement | null>(null);
+  const [revealOn, setRevealOn] = useState(false);
+
   useEffect(() => {
     if (typeof window !== "undefined") {
       if ("scrollRestoration" in window.history) {
@@ -2075,25 +2538,73 @@ function LandingPage() {
     }
   }, []);
 
+  /* Aparición suave de títulos y cards al entrar en pantalla */
+  useEffect(() => {
+    const root = rootRef.current;
+    if (!isReady || !root || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const io = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((e) => {
+          if (e.isIntersecting) {
+            e.target.setAttribute("data-revealed", "");
+            io.unobserve(e.target);
+          }
+        });
+      },
+      { threshold: 0.12, rootMargin: "0px 0px -40px 0px" },
+    );
+    const observeAll = () =>
+      root.querySelectorAll("[data-reveal]:not([data-revealed])").forEach((el) => io.observe(el));
+    observeAll();
+    /* Nodos que React monta después (p. ej. al re-renderizar) también se observan */
+    const mo = new MutationObserver(observeAll);
+    mo.observe(root, { childList: true, subtree: true });
+    setRevealOn(true);
+    return () => {
+      io.disconnect();
+      mo.disconnect();
+    };
+  }, [isReady]);
+
+  useEffect(() => {
+    if (!isReady || !rootRef.current || typeof window === "undefined") return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+    const ctx = gsap.context(() => {
+      // Hero entrance (minimalist text + moving Behance rectangle strip)
+      const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
+      tl.fromTo("[data-hero-line]", { yPercent: 108 }, { yPercent: 0, duration: 0.9 })
+        .fromTo(
+          "[data-hero-fade]",
+          { y: 16, opacity: 0 },
+          { y: 0, opacity: 1, duration: 0.65, stagger: 0.08 },
+          "-=0.55",
+        )
+        .fromTo(
+          "[data-hero-reel]",
+          { y: 28, opacity: 0 },
+          { y: 0, opacity: 1, duration: 0.85 },
+          "-=0.5",
+        );
+    }, rootRef);
+
+    return () => ctx.revert();
+  }, [isReady]);
+
   return (
-    <>
-      <Preloader />
+    <div ref={rootRef} className={`${isReady ? "is-ready" : ""} ${revealOn ? "reveal-on" : ""} `}>
+      <Preloader onReady={() => setIsReady(true)} />
       <Nav />
-      <main className="overflow-x-hidden">
+      <main className="overflow-x-clip">
         <Hero />
-        <div className="mt-14 md:mt-20">
-          <Marquee />
-        </div>
         <Services />
+        <Portfolio />
         <AboutMe />
         <Onboarding />
-        <ImageBand />
-        <Portfolio />
-
         <Pricing />
         <Contact />
         <Footer />
       </main>
-    </>
+    </div>
   );
 }

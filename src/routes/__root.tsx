@@ -16,8 +16,8 @@ function NotFoundComponent() {
   return (
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
       <div className="max-w-md text-center">
-        <h1 className="text-7xl font-bold text-foreground">404</h1>
-        <h2 className="mt-4 text-xl font-semibold text-foreground">Page not found</h2>
+        <h1 className="display-xl text-foreground">404</h1>
+        <h2 className="mt-4 display-sm text-foreground">Page not found</h2>
         <p className="mt-2 text-sm text-muted-foreground">
           The page you're looking for doesn't exist or has been moved.
         </p>
@@ -77,11 +77,19 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "La Manzanita · Agencia Creativa de Marketing" },
-      { name: "description", content: "Tu marca en redes con estrategia real. Estrategia, diseño, reels y campañas — todo en una sola persona." },
+      { title: "Anna González · Estudio Creativo de Marketing y Redes en Lima" },
+      {
+        name: "description",
+        content:
+          "Estudio creativo en Lima: gestión de redes sociales, producción de reels, diseño y pauta en Meta y Google Ads para marcas de moda, beauty y gastronomía.",
+      },
       { name: "author", content: "Ana González Hidalgo" },
-      { property: "og:title", content: "La Manzanita · Agencia Creativa" },
-      { property: "og:description", content: "Tu marca en redes, con estrategia real." },
+      { property: "og:title", content: "Anna González · Contenido que vende, estética que se recuerda" },
+      {
+        property: "og:description",
+        content:
+          "Estrategia, producción audiovisual y gestión de redes sociales para marcas que quieren crecer en digital.",
+      },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
@@ -93,7 +101,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
       {
         rel: "stylesheet",
-        href: "https://fonts.googleapis.com/css2?family=Outfit:wght@600;700;800;900&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap",
+        href: "https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Manrope:wght@300;400;500;600&display=swap",
       },
     ],
   }),
@@ -105,7 +113,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 
 function RootShell({ children }: { children: ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="es">
       <head>
         <HeadContent />
       </head>
