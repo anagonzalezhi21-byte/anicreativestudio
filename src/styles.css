@@ -606,6 +606,8 @@
 }
 
 .glow-border {
+  /* Valor de respaldo: sin @property (navegadores antiguos) el borde queda fijo pero visible */
+  --glow-angle: 0deg;
   position: relative;
   isolation: isolate;
   border-radius: 2rem;

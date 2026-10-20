@@ -334,11 +334,14 @@ function CoverTitle({
   size = "lg",
   as: Tag = "h2",
   dark = false,
+  plainEnd = false,
 }: {
   kicker: React.ReactNode;
   word: string;
   end?: string;
   size?: "lg" | "md" | "sm";
+  /* El signo final usa el mismo color del título (sin acento) */
+  plainEnd?: boolean;
   as?: "h2" | "h3";
   /* Sobre fondo negro */
   dark?: boolean;
@@ -358,7 +361,7 @@ function CoverTitle({
         }`}
       >
         {word}
-        <span className={dark ? "text-[#C25A72]" : "text-[#6E1E2D]"}>{end}</span>
+        <span className={plainEnd ? "" : dark ? "text-[#C25A72]" : "text-[#6E1E2D]"}>{end}</span>
       </span>
     </Tag>
   );
@@ -372,11 +375,13 @@ function SectionHeading({
   aside,
   middle,
   dark = false,
+  plainEnd = false,
 }: {
   kicker: React.ReactNode;
   word: string;
   end?: string;
   dark?: boolean;
+  plainEnd?: boolean;
   aside?: React.ReactNode;
   /* Contenido entre el título y el texto lateral (p. ej. un carrusel) */
   middle?: React.ReactNode;
@@ -384,7 +389,7 @@ function SectionHeading({
   return (
     <div data-reveal className="mb-6 flex items-end justify-between gap-6 md:mb-8">
       <div className="shrink-0">
-        <CoverTitle kicker={kicker} word={word} end={end} dark={dark} />
+        <CoverTitle kicker={kicker} word={word} end={end} dark={dark} plainEnd={plainEnd} />
       </div>
       {middle}
       {aside}
@@ -861,6 +866,7 @@ function Services() {
           word="Situaciones"
           end="?"
           dark
+          plainEnd
           aside={
             <p className="hidden max-w-xs shrink-0 text-base leading-relaxed text-white/60 md:block">
               Diseñamos, producimos y gestionamos tu contenido para que destaque, conecte y
@@ -992,7 +998,7 @@ function AboutMe() {
             <div className="aspect-[856/1280] w-full max-w-sm overflow-hidden lg:h-full lg:w-auto lg:max-w-none">
               <img
                 src="/about_me.jpeg"
-                alt="Ana González, directora creativa"
+                alt="Anna González, directora creativa"
                 className="h-full w-full object-cover"
               />
             </div>
@@ -1037,7 +1043,7 @@ function AboutMe() {
 
                 {/* 2. Experiencia */}
                 <article className="lg:flex lg:h-full lg:w-full lg:shrink-0 lg:flex-col lg:justify-start lg:pr-10">
-                  <h3 className="cover-md font-display">Hola, soy Ana</h3>
+                  <h3 className="cover-md font-display">Hola, soy Anna</h3>
                   <p className="mt-3 font-display text-2xl leading-tight text-[#6E1E2D] md:text-3xl">
                     Freelancer, Content Manager y Directora Creativa
                   </p>
@@ -2367,7 +2373,7 @@ function Contact() {
     e.preventDefault();
     const mensaje = String(new FormData(e.currentTarget).get("mensaje") ?? "").trim();
     if (!mensaje) return;
-    window.open(waLink(`Hola Ana, ${mensaje}`), "_blank");
+    window.open(waLink(`Hola Anna, ${mensaje}`), "_blank");
   };
 
   return (

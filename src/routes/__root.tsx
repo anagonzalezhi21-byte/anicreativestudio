@@ -84,8 +84,11 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         content:
           "Estudio creativo en Lima: gestión de redes sociales, producción de reels, diseño y pauta en Meta y Google Ads para marcas de moda, beauty y gastronomía.",
       },
-      { name: "author", content: "Ana González Hidalgo" },
-      { property: "og:title", content: "Anna González · Contenido que vende, estética que se recuerda" },
+      { name: "author", content: "Anna González Hidalgo" },
+      {
+        property: "og:title",
+        content: "Anna González · Contenido que vende, estética que se recuerda",
+      },
       {
         property: "og:description",
         content:
